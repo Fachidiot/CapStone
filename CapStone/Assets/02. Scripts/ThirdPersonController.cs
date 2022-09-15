@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("Player")]
+    [SerializeField]
+    Animator animator;
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
 
@@ -90,7 +92,6 @@ public class ThirdPersonController : MonoBehaviour
     int m_animIDMotionSpeed;
 
     PlayerInput playerInput;
-    Animator animator;
     CharacterController controller;
     CustomInput input;
     GameObject mainCamera;
@@ -112,16 +113,17 @@ public class ThirdPersonController : MonoBehaviour
     {
         // get a reference to our main camera
         if (mainCamera == null)
-        {
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        }
+
+        m_hasAnimator = animator != null;
     }
 
     private void Start()
     {
         m_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
-        m_hasAnimator = TryGetComponent(out animator);
+        
+        if (animator == null)
+            m_hasAnimator = TryGetComponent(out animator);
         controller = GetComponent<CharacterController>();
         input = GetComponent<CustomInput>();
         playerInput = GetComponent<PlayerInput>();
@@ -135,7 +137,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Update()
     {
-        m_hasAnimator = TryGetComponent(out animator);
+        //m_hasAnimator = TryGetComponent(out animator);
 
         JumpAndGravity();
         GroundedCheck();
@@ -159,10 +161,8 @@ public class ThirdPersonController : MonoBehaviour
     private void GroundedCheck()
     {
         // set sphere position, with offset
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-            transform.position.z);
-        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-            QueryTriggerInteraction.Ignore);
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+        Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
         // update animator if using character
         if (m_hasAnimator)
@@ -236,8 +236,7 @@ public class ThirdPersonController : MonoBehaviour
         // if there is a move input rotate player when the player is moving
         if (input.move != Vector2.zero)
         {
-            m_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                mainCamera.transform.eulerAngles.y;
+            m_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, m_targetRotation, ref m_rotationVelocity,
                 RotationSmoothTime);
 
@@ -249,8 +248,7 @@ public class ThirdPersonController : MonoBehaviour
         Vector3 targetDirection = Quaternion.Euler(0.0f, m_targetRotation, 0.0f) * Vector3.forward;
 
         // move the player
-        controller.Move(targetDirection.normalized * (m_speed * Time.deltaTime) +
-                            new Vector3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
+        controller.Move(targetDirection.normalized * (m_speed * Time.deltaTime) + new Vector3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
 
         // update animator if using character
         if (m_hasAnimator)
@@ -350,7 +348,7 @@ public class ThirdPersonController : MonoBehaviour
             GroundedRadius);
     }
 
-    private void OnFootstep(AnimationEvent animationEvent)
+    void OnFootstep(AnimationEvent animationEvent)
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
@@ -362,7 +360,7 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    private void OnLand(AnimationEvent animationEvent)
+    void OnLand(AnimationEvent animationEvent)
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
