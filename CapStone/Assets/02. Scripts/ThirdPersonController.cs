@@ -3,11 +3,17 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(CustomInput))]
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("Player")]
-    [SerializeField]
-    Animator animator;
+    public Vector2 VerticalClamp = new Vector2(-8, 30);
+    public Vector2 HorizontalClamp = new Vector2(-30, 30);
+    public GameObject PlayerNeck;
+
+    [Tooltip("Crouch speed of the character in m/s")]
+    public float CrouchSpeed = 1.2f;
+
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
 
@@ -69,8 +75,13 @@ public class ThirdPersonController : MonoBehaviour
     public bool LockCameraPosition = false;
 
     // cinemachine
+    [SerializeField]
     float m_cinemachineTargetYaw;
     float m_cinemachineTargetPitch;
+
+    // neck
+    [SerializeField]
+    float m_neckX;
 
     // player
     float m_speed;
@@ -91,10 +102,11 @@ public class ThirdPersonController : MonoBehaviour
     int m_animIDFreeFall;
     int m_animIDMotionSpeed;
 
+    Animator animator;
+    GameObject mainCamera;
+    CustomInput input;
     PlayerInput playerInput;
     CharacterController controller;
-    CustomInput input;
-    GameObject mainCamera;
 
     const float m_threshold = 0.01f;
 
@@ -107,7 +119,6 @@ public class ThirdPersonController : MonoBehaviour
             return playerInput.currentControlScheme == "KeyboardMouse";
         }
     }
-
 
     private void Awake()
     {
@@ -137,11 +148,11 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Update()
     {
-        //m_hasAnimator = TryGetComponent(out animator);
-
         JumpAndGravity();
         GroundedCheck();
         Move();
+        MouseClick();
+        KeyInput();
     }
 
     private void LateUpdate()
@@ -149,26 +160,26 @@ public class ThirdPersonController : MonoBehaviour
         CameraRotation();
     }
 
+    // Animator Parameter ID값 설정
     private void AssignAnimationIDs()
     {
         m_animIDSpeed = Animator.StringToHash("Speed");
-        m_animIDGrounded = Animator.StringToHash("Grounded");
         m_animIDJump = Animator.StringToHash("Jump");
+        m_animIDGrounded = Animator.StringToHash("Grounded");
         m_animIDFreeFall = Animator.StringToHash("FreeFall");
         m_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
     }
 
+    // Player 발밑에 구체 생성 & 구체에 GroundLayer에 해당하는 오브젝트와 collider 충돌 확인
     private void GroundedCheck()
     {
-        // set sphere position, with offset
+        // 발밑에 생성할 구체 위치값
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
         Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
-        // update animator if using character
+        // 만약 플레이어가 무한점프를 한다면 플레이어의 Layer와 GroundLayer 충돌 확인
         if (m_hasAnimator)
-        {
             animator.SetBool(m_animIDGrounded, Grounded);
-        }
     }
 
     private void CameraRotation()
@@ -188,14 +199,18 @@ public class ThirdPersonController : MonoBehaviour
         m_cinemachineTargetPitch = ClampAngle(m_cinemachineTargetPitch, BottomClamp, TopClamp);
 
         // Cinemachine will follow this target
-        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(m_cinemachineTargetPitch + CameraAngleOverride,
-            m_cinemachineTargetYaw, 0.0f);
+        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(m_cinemachineTargetPitch + CameraAngleOverride, m_cinemachineTargetYaw, 0.0f);
+
+        // Player Neck
+        m_neckX = (m_cinemachineTargetYaw < HorizontalClamp.x - 180 || m_cinemachineTargetYaw > HorizontalClamp.y + 180) ? -(m_cinemachineTargetYaw - transform.eulerAngles.y) : m_cinemachineTargetYaw - transform.eulerAngles.y;
+        PlayerNeck.transform.localRotation = Quaternion.Euler(-Mathf.Clamp(m_neckX, HorizontalClamp.x, HorizontalClamp.y), 0.0f, Mathf.Clamp(m_cinemachineTargetPitch, VerticalClamp.x, VerticalClamp.y));
     }
 
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
         float targetSpeed = input.sprint ? SprintSpeed : MoveSpeed;
+        targetSpeed = input.crouch ? CrouchSpeed : targetSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -324,6 +339,60 @@ public class ThirdPersonController : MonoBehaviour
         if (m_verticalVelocity < m_terminalVelocity)
         {
             m_verticalVelocity += Gravity * Time.deltaTime;
+        }
+    }
+
+    void MouseClick()
+    {
+        // Dash
+        if (input.mouseR)
+        {
+
+        }
+
+        // Attack
+        if (input.mouseL)
+        {
+
+        }
+    }
+
+    void KeyInput()
+    {
+        if (input.skill1)
+        {
+            Debug.Log("skill1");
+            input.skill1 = false;
+        }
+
+        if (input.skill2)
+        {
+            Debug.Log("skill2");
+            input.skill2 = false;
+        }
+
+        if (input.ultimate)
+        {
+            Debug.Log("ultimate");
+            input.ultimate = false;
+        }
+
+        if (input.reload)
+        {
+            Debug.Log("reload");
+            input.reload = false;
+        }
+
+        if (input.interact)
+        {
+            Debug.Log("interact");
+            input.interact = false;
+        }
+
+        if (input.inventory)
+        {
+            Debug.Log("inventory");
+            input.inventory = false;
         }
     }
 
