@@ -2569,7 +2569,7 @@ MonoBehaviour:
   VerticalClamp: {x: -9, y: 30}
   HorizontalClamp: {x: -30, y: 30}
   PlayerNeck: {fileID: 1839683627490173}
-  CrouchSpeed: 0
+  CrouchSpeed: 1.2
   MoveSpeed: 2
   SprintSpeed: 5.335
   RotationSmoothTime: 0.12
