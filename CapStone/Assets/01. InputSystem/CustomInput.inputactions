@@ -25,7 +25,7 @@
                 },
                 {
                     "name": "Crouch",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "fdbdb9cb-0136-40df-b013-3e6d0f55e211",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -416,34 +416,6 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "New action map",
-            "id": "ab1f38bc-dc9f-4a28-81a8-354a25c07cee",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "5631a12e-8613-4b1c-951b-b4cc7b40297f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "cb63c3bf-85d3-42c8-b818-7f917b693529",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

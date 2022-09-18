@@ -10,6 +10,8 @@ public class ThirdPersonController : MonoBehaviour
     public Vector2 VerticalClamp = new Vector2(-8, 30);
     public Vector2 HorizontalClamp = new Vector2(-30, 30);
     public GameObject PlayerNeck;
+    //public GameObject PlayerHand;
+    public Weapon weapon;
 
     [Tooltip("Crouch speed of the character in m/s")]
     public float CrouchSpeed = 1.2f;
@@ -19,6 +21,9 @@ public class ThirdPersonController : MonoBehaviour
 
     [Tooltip("Sprint speed of the character in m/s")]
     public float SprintSpeed = 5.335f;
+
+    [Tooltip("Sprint speed of the character in m/s")]
+    public float DashDistance = 5;
 
     [Tooltip("How fast the character turns to face movement direction")]
     [Range(0.0f, 0.3f)]
@@ -84,6 +89,7 @@ public class ThirdPersonController : MonoBehaviour
     float m_neckX;
 
     // player
+    Vector3 m_dashVelocity;
     float m_speed;
     float m_animationBlend;
     float m_targetRotation = 0.0f;
@@ -96,7 +102,10 @@ public class ThirdPersonController : MonoBehaviour
     float m_fallTimeoutDelta;
 
     // animation IDs
+    int m_animIDZoom;
+    int m_animIDHasWeapon;
     int m_animIDSpeed;
+    int m_animIDFire;
     int m_animIDGrounded;
     int m_animIDJump;
     int m_animIDFreeFall;
@@ -111,6 +120,7 @@ public class ThirdPersonController : MonoBehaviour
     const float m_threshold = 0.01f;
 
     bool m_hasAnimator;
+    bool m_hasWeapon = true;
 
     bool IsCurrentDeviceMouse
     {
@@ -163,6 +173,9 @@ public class ThirdPersonController : MonoBehaviour
     // Animator Parameter ID값 설정
     private void AssignAnimationIDs()
     {
+        m_animIDFire = Animator.StringToHash("Fire");
+        m_animIDHasWeapon = Animator.StringToHash("HasWeapon");
+        m_animIDZoom = Animator.StringToHash("Zoom");
         m_animIDSpeed = Animator.StringToHash("Speed");
         m_animIDJump = Animator.StringToHash("Jump");
         m_animIDGrounded = Animator.StringToHash("Grounded");
@@ -182,6 +195,7 @@ public class ThirdPersonController : MonoBehaviour
             animator.SetBool(m_animIDGrounded, Grounded);
     }
 
+    // 카메라 회전
     private void CameraRotation()
     {
         // if there is an input and camera position is not fixed
@@ -210,7 +224,7 @@ public class ThirdPersonController : MonoBehaviour
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
         float targetSpeed = input.sprint ? SprintSpeed : MoveSpeed;
-        targetSpeed = input.crouch ? CrouchSpeed : targetSpeed;
+        // targetSpeed = input.crouch ? CrouchSpeed : targetSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -230,8 +244,7 @@ public class ThirdPersonController : MonoBehaviour
         {
             // creates curved result rather than a linear one giving a more organic speed change
             // note T in Lerp is clamped, so we don't need to clamp our speed
-            m_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                Time.deltaTime * SpeedChangeRate);
+            m_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
 
             // round speed to 3 decimal places
             m_speed = Mathf.Round(m_speed * 1000f) / 1000f;
@@ -344,54 +357,93 @@ public class ThirdPersonController : MonoBehaviour
 
     void MouseClick()
     {
-        // Dash
+        if (m_hasWeapon)
+        {
+            animator.SetFloat(m_animIDZoom, input.mouseR ? 1 : 0);
+            animator.SetBool(m_animIDFire, input.mouseL);
+        }
+        // Zoom
         if (input.mouseR)
         {
 
         }
 
-        // Attack
+        // Attack Combo
         if (input.mouseL)
         {
-
+            animator.SetFloat(m_animIDZoom, 1);
+            weapon.Fire();
+            // if (m_hasWeapon)
+            // {
+            // 
+            // }
+            // else
+            // {
+            // 
+            // }
         }
     }
 
     void KeyInput()
     {
+        // Dash
+        if (input.crouch)
+        {
+            m_dashVelocity += Vector3.Scale(transform.forward, DashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime)));
+
+            //gravity
+            m_dashVelocity.y += Gravity * Time.deltaTime;
+
+            //dash ground drags
+            m_dashVelocity.x /= 1 + Time.deltaTime * 10;
+            m_dashVelocity.y /= 1 + Time.deltaTime * 10;
+            m_dashVelocity.z /= 1 + Time.deltaTime * 10;
+
+            controller.Move(m_dashVelocity * Time.deltaTime);
+            input.crouch = false;
+        }
+
+        // Skill1
         if (input.skill1)
         {
-            Debug.Log("skill1");
+            // 스킬 스크립트
+            // 스킬 생성
             input.skill1 = false;
         }
 
         if (input.skill2)
         {
-            Debug.Log("skill2");
+            // 스킬 스크립트
+            // 스킬 생성
             input.skill2 = false;
         }
 
         if (input.ultimate)
         {
-            Debug.Log("ultimate");
+            // 궁극기 스크립트
+            // 궁극기 생성
             input.ultimate = false;
         }
 
         if (input.reload)
         {
-            Debug.Log("reload");
+            // 장전 스크립트
+            // 해당 총기 장전
             input.reload = false;
         }
 
         if (input.interact)
         {
-            Debug.Log("interact");
+            // 상호작용 
+            if (m_hasWeapon)
+                animator.SetBool(m_animIDHasWeapon, m_hasWeapon);
             input.interact = false;
         }
 
         if (input.inventory)
         {
             Debug.Log("inventory");
+            // UI 활성화 비활성화
             input.inventory = false;
         }
     }
