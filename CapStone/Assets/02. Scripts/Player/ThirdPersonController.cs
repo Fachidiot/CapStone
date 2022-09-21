@@ -13,8 +13,10 @@ public class ThirdPersonController : MonoBehaviour
     //public GameObject PlayerHand;
     public Weapon weapon;
 
+    public GameObject InventoryUI;
+
     [Tooltip("Crouch speed of the character in m/s")]
-    public float CrouchSpeed = 1.2f;
+    public float DashDrag = 1.2f;
 
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
@@ -89,38 +91,39 @@ public class ThirdPersonController : MonoBehaviour
     float m_neckX;
 
     // player
-    Vector3 m_dashVelocity;
-    float m_speed;
-    float m_animationBlend;
-    float m_targetRotation = 0.0f;
-    float m_rotationVelocity;
-    float m_verticalVelocity;
-    float m_terminalVelocity = 53.0f;
+    protected Vector3 m_dashVelocity;
+    protected float m_sensitivity = 3f;
+    protected float m_speed;
+    protected float m_animationBlend;
+    protected float m_targetRotation = 0.0f;
+    protected float m_rotationVelocity;
+    protected float m_verticalVelocity;
+    protected float m_terminalVelocity = 53.0f;
 
     // timeout deltatime
-    float m_jumpTimeoutDelta;
-    float m_fallTimeoutDelta;
+    protected float m_jumpTimeoutDelta;
+    protected float m_fallTimeoutDelta;
 
     // animation IDs
-    int m_animIDZoom;
-    int m_animIDHasWeapon;
     int m_animIDSpeed;
-    int m_animIDFire;
     int m_animIDGrounded;
     int m_animIDJump;
     int m_animIDFreeFall;
     int m_animIDMotionSpeed;
+    int m_animIDFire;
+    int m_animIDZoom;
+    int m_animIDHasWeapon;
 
-    Animator animator;
-    GameObject mainCamera;
-    CustomInput input;
-    PlayerInput playerInput;
-    CharacterController controller;
+    protected Animator animator;
+    protected GameObject mainCamera;
+    protected CustomInput input;
+    protected PlayerInput playerInput;
+    protected CharacterController controller;
 
-    const float m_threshold = 0.01f;
+    protected const float m_threshold = 0.01f;
 
-    bool m_hasAnimator;
-    bool m_hasWeapon = true;
+    protected bool m_hasAnimator;
+    protected bool m_hasWeapon = true;
 
     bool IsCurrentDeviceMouse
     {
@@ -162,7 +165,7 @@ public class ThirdPersonController : MonoBehaviour
         GroundedCheck();
         Move();
         MouseClick();
-        KeyInput();
+        SkillSystem();
     }
 
     private void LateUpdate()
@@ -173,14 +176,14 @@ public class ThirdPersonController : MonoBehaviour
     // Animator Parameter ID값 설정
     private void AssignAnimationIDs()
     {
-        m_animIDFire = Animator.StringToHash("Fire");
-        m_animIDHasWeapon = Animator.StringToHash("HasWeapon");
-        m_animIDZoom = Animator.StringToHash("Zoom");
         m_animIDSpeed = Animator.StringToHash("Speed");
         m_animIDJump = Animator.StringToHash("Jump");
         m_animIDGrounded = Animator.StringToHash("Grounded");
         m_animIDFreeFall = Animator.StringToHash("FreeFall");
         m_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        m_animIDFire = Animator.StringToHash("Fire");
+        m_animIDHasWeapon = Animator.StringToHash("HasWeapon");
+        m_animIDZoom = Animator.StringToHash("Zoom");
     }
 
     // Player 발밑에 구체 생성 & 구체에 GroundLayer에 해당하는 오브젝트와 collider 충돌 확인
@@ -202,7 +205,7 @@ public class ThirdPersonController : MonoBehaviour
         if (input.look.sqrMagnitude >= m_threshold && !LockCameraPosition)
         {
             //Don't multiply mouse input by Time.deltaTime;
-            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+            float deltaTimeMultiplier = IsCurrentDeviceMouse ? m_sensitivity : Time.deltaTime;
 
             m_cinemachineTargetYaw += input.look.x * deltaTimeMultiplier;
             m_cinemachineTargetPitch += input.look.y * deltaTimeMultiplier;
@@ -224,7 +227,7 @@ public class ThirdPersonController : MonoBehaviour
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
         float targetSpeed = input.sprint ? SprintSpeed : MoveSpeed;
-        // targetSpeed = input.crouch ? CrouchSpeed : targetSpeed;
+        // targetSpeed = input.crouch ? DashDrag : targetSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -355,7 +358,25 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    void MouseClick()
+    void Interact()
+    {
+        if (input.interact)
+        {
+
+        }
+    }
+
+    void UISystem()
+    {
+        if (input.inventory)
+        {
+            Debug.Log("inventory");
+            // UI 활성화 비활성화
+
+        }
+    }
+
+    protected virtual void MouseClick()
     {
         if (m_hasWeapon)
         {
@@ -371,8 +392,11 @@ public class ThirdPersonController : MonoBehaviour
         // Attack Combo
         if (input.mouseL)
         {
-            animator.SetFloat(m_animIDZoom, 1);
-            weapon.Fire();
+            if (m_hasWeapon)
+            {
+                animator.SetFloat(m_animIDZoom, 1);
+                weapon.Fire();
+            }
             // if (m_hasWeapon)
             // {
             // 
@@ -384,7 +408,7 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    void KeyInput()
+    protected virtual void SkillSystem()
     {
         // Dash
         if (input.crouch)
@@ -431,21 +455,6 @@ public class ThirdPersonController : MonoBehaviour
             // 해당 총기 장전
             input.reload = false;
         }
-
-        if (input.interact)
-        {
-            // 상호작용 
-            if (m_hasWeapon)
-                animator.SetBool(m_animIDHasWeapon, m_hasWeapon);
-            input.interact = false;
-        }
-
-        if (input.inventory)
-        {
-            Debug.Log("inventory");
-            // UI 활성화 비활성화
-            input.inventory = false;
-        }
     }
 
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -487,5 +496,10 @@ public class ThirdPersonController : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(controller.center), FootstepAudioVolume);
         }
+    }
+
+    public void SetSensitivity(float newm_sensitivity)
+    {
+        m_sensitivity = newm_sensitivity;
     }
 }

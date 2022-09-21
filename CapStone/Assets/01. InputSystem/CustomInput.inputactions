@@ -124,7 +124,7 @@
                 },
                 {
                     "name": "Inventory",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "a9097040-a3b6-4df9-a6b5-58e03a301ad6",
                     "expectedControlType": "Button",
                     "processors": "",
