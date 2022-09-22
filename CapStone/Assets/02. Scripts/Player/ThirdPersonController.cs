@@ -7,14 +7,6 @@ using UnityEngine.InputSystem;
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("Player")]
-    public Vector2 VerticalClamp = new Vector2(-8, 30);
-    public Vector2 HorizontalClamp = new Vector2(-30, 30);
-    public GameObject PlayerNeck;
-    //public GameObject PlayerHand;
-    public Weapon weapon;
-
-    public GameObject InventoryUI;
-
     [Tooltip("Crouch speed of the character in m/s")]
     public float DashDrag = 1.2f;
 
@@ -110,20 +102,17 @@ public class ThirdPersonController : MonoBehaviour
     int m_animIDJump;
     int m_animIDFreeFall;
     int m_animIDMotionSpeed;
-    int m_animIDFire;
-    int m_animIDZoom;
-    int m_animIDHasWeapon;
 
-    protected Animator animator;
-    protected GameObject mainCamera;
-    protected CustomInput input;
-    protected PlayerInput playerInput;
-    protected CharacterController controller;
+    Animator animator;
+    GameObject mainCamera;
+    CustomInput input;
+    PlayerInput playerInput;
+    CharacterController controller;
 
     protected const float m_threshold = 0.01f;
 
     protected bool m_hasAnimator;
-    protected bool m_hasWeapon = true;
+    bool m_rotateOnMove = true;
 
     bool IsCurrentDeviceMouse
     {
@@ -181,9 +170,6 @@ public class ThirdPersonController : MonoBehaviour
         m_animIDGrounded = Animator.StringToHash("Grounded");
         m_animIDFreeFall = Animator.StringToHash("FreeFall");
         m_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-        m_animIDFire = Animator.StringToHash("Fire");
-        m_animIDHasWeapon = Animator.StringToHash("HasWeapon");
-        m_animIDZoom = Animator.StringToHash("Zoom");
     }
 
     // Player 발밑에 구체 생성 & 구체에 GroundLayer에 해당하는 오브젝트와 collider 충돌 확인
@@ -193,9 +179,9 @@ public class ThirdPersonController : MonoBehaviour
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
         Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
-        // 만약 플레이어가 무한점프를 한다면 플레이어의 Layer와 GroundLayer 충돌 확인
         if (m_hasAnimator)
             animator.SetBool(m_animIDGrounded, Grounded);
+        // 만약 플레이어가 무한점프를 한다면 플레이어의 Layer와 GroundLayer 충돌 확인
     }
 
     // 카메라 회전
@@ -217,10 +203,6 @@ public class ThirdPersonController : MonoBehaviour
 
         // Cinemachine will follow this target
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(m_cinemachineTargetPitch + CameraAngleOverride, m_cinemachineTargetYaw, 0.0f);
-
-        // Player Neck
-        m_neckX = (m_cinemachineTargetYaw < HorizontalClamp.x - 180 || m_cinemachineTargetYaw > HorizontalClamp.y + 180) ? -(m_cinemachineTargetYaw - transform.eulerAngles.y) : m_cinemachineTargetYaw - transform.eulerAngles.y;
-        PlayerNeck.transform.localRotation = Quaternion.Euler(-Mathf.Clamp(m_neckX, HorizontalClamp.x, HorizontalClamp.y), 0.0f, Mathf.Clamp(m_cinemachineTargetPitch, VerticalClamp.x, VerticalClamp.y));
     }
 
     private void Move()
@@ -272,7 +254,8 @@ public class ThirdPersonController : MonoBehaviour
                 RotationSmoothTime);
 
             // rotate to face input direction relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (m_rotateOnMove)
+                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
 
@@ -358,54 +341,28 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    void Interact()
-    {
-        if (input.interact)
-        {
-
-        }
-    }
-
-    void UISystem()
-    {
-        if (input.inventory)
-        {
-            Debug.Log("inventory");
-            // UI 활성화 비활성화
-
-        }
-    }
-
     protected virtual void MouseClick()
     {
-        if (m_hasWeapon)
-        {
-            animator.SetFloat(m_animIDZoom, input.mouseR ? 1 : 0);
-            animator.SetBool(m_animIDFire, input.mouseL);
-        }
-        // Zoom
-        if (input.mouseR)
-        {
+        //if (m_hasWeapon)
+        //{
+        //    animator.SetFloat(m_animIDZoom, input.mouseR ? 1 : 0);
+        //    animator.SetBool(m_animIDFire, input.mouseL);
+        //}
+        //// Zoom
+        //if (input.mouseR)
+        //{
 
-        }
+        //}
 
-        // Attack Combo
-        if (input.mouseL)
-        {
-            if (m_hasWeapon)
-            {
-                animator.SetFloat(m_animIDZoom, 1);
-                weapon.Fire();
-            }
-            // if (m_hasWeapon)
-            // {
-            // 
-            // }
-            // else
-            // {
-            // 
-            // }
-        }
+        //// Attack Combo
+        //if (input.mouseL)
+        //{
+        //    if (m_hasWeapon)
+        //    {
+        //        animator.SetFloat(m_animIDZoom, 1);
+        //        weapon.Fire();
+        //    }
+        //}
     }
 
     protected virtual void SkillSystem()
@@ -501,5 +458,10 @@ public class ThirdPersonController : MonoBehaviour
     public void SetSensitivity(float newm_sensitivity)
     {
         m_sensitivity = newm_sensitivity;
+    }
+
+    public void SetRotateOnMove(bool newRotateOnMove)
+    {
+        m_rotateOnMove = newRotateOnMove;
     }
 }
