@@ -5,21 +5,29 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public WeaponType type;
-    // 총알을 생산할 공장
+    // ?????? ?????? ????
     public float waitingTime = 0.1f;
     public GameObject bulletPrefab;
-    // 총구
+    // ????
     public GameObject firePosition;
+    public List<AudioClip> audioClips;
 
     bool m_canFire = true;
     float timer = 0.0f;
+    AudioSource audioPlayer;
+
+    private void Start()
+    {
+        audioPlayer = GetComponent<AudioSource>();
+    }
 
     public void Fire()
     {
         if (!m_canFire)
             return;
-        // 2. 총알 공장에서 총알을 만든다.
+        
         GameObject bullet = Instantiate(bulletPrefab, firePosition.transform.position, firePosition.transform.rotation);
+        audioPlayer.clip = audioClips[0];
         m_canFire = false;
     }
 

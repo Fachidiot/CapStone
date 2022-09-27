@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.Animations.Rigging;
 using Cinemachine;
 
 [RequireComponent(typeof(ThirdPersonController))]
@@ -14,7 +14,9 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField]
     LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField]
-    Transform debugTransform;
+    Transform targetTransform;
+    [SerializeField]
+    List<MultiAimConstraint> multiAimConstraintsList;
     [Range(1, 30)]
     public float normalSensitivity = 3f;
     [Range(1, 10)]
@@ -25,7 +27,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     public Vector2 HorizontalClamp = new Vector2(-30, 30);
 
     //public GameObject PlayerHand;
-    public Weapon weapon;
+    [SerializeField]
+    List<Weapon> weaponList;
 
     //Animation ID
     int m_animIDFire;
@@ -33,9 +36,12 @@ public class ThirdPersonShooterController : MonoBehaviour
     int m_animIDHasWeapon;
 
     ThirdPersonController thirdPersonController;
+    RigBuilder rigController;
     CustomInput input;
     Animator animator;
     Vector2 screenCenterPoint;
+
+    int m_currentWeapon = 0;
 
     bool m_prevHasWeapon = false;
     bool m_hasWeapon = false;
@@ -44,6 +50,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         input = GetComponent<CustomInput>();
         animator = GetComponent<Animator>();
+        rigController = GetComponent<RigBuilder>();
         thirdPersonController = GetComponent<ThirdPersonController>();
         screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
     }
@@ -72,6 +79,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     void Zoom(Vector3 mousePosition)
     {
+        // if Player do zoom
         if (input.mouseR)
         {
             CrossHair.SetActive(true);
@@ -79,6 +87,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
             animator.SetFloat(m_animIDZoom, 1f, 0.5f, Time.deltaTime);
+            rigController.layers[0].rig.weight = 1;
 
             mousePosition.y = transform.position.y;
             Vector3 aimDirection = (mousePosition - transform.position).normalized;
@@ -96,6 +105,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
             animator.SetFloat(m_animIDZoom, 0f, 0.5f, Time.deltaTime);
+            rigController.layers[0].rig.weight = 0;
         }
     }
 
@@ -104,7 +114,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (input.mouseL)
         {
             animator.SetBool(m_animIDFire, true);
-            weapon.Fire();
+            if (weaponList.Count > 0)
+                weaponList[m_currentWeapon].Fire();
         } else
             animator.SetBool(m_animIDFire, false);
     }
@@ -114,6 +125,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
+            targetTransform.position = raycastHit.point;
             return raycastHit.point;
         }
         return Vector3.zero;
