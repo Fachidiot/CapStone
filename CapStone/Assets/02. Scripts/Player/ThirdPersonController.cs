@@ -148,11 +148,15 @@ public class ThirdPersonController : MonoBehaviour
         m_fallTimeoutDelta = FallTimeout;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         JumpAndGravity();
-        GroundedCheck();
         Move();
+    }
+
+    private void Update()
+    {
+        GroundedCheck();
         MouseClick();
         SkillSystem();
     }
@@ -208,7 +212,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = input.sprint ? SprintSpeed : MoveSpeed;
+        float targetSpeed = input.sprint ? SprintSpeed * 6 : MoveSpeed * 6;
         // targetSpeed = input.crouch ? DashDrag : targetSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon

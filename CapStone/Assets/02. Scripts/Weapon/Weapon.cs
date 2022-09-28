@@ -10,7 +10,6 @@ public class Weapon : MonoBehaviour
     public GameObject bulletPrefab;
     // ????
     public GameObject firePosition;
-    public List<AudioClip> audioClips;
 
     bool m_canFire = true;
     float timer = 0.0f;
@@ -27,7 +26,6 @@ public class Weapon : MonoBehaviour
             return;
         
         GameObject bullet = Instantiate(bulletPrefab, firePosition.transform.position, firePosition.transform.rotation);
-        audioPlayer.clip = audioClips[0];
         m_canFire = false;
     }
 

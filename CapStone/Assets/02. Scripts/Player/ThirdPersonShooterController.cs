@@ -21,6 +21,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     public float normalSensitivity = 3f;
     [Range(1, 10)]
     public float aimSensitivity = 2f;
+    public float aimDuration = 0.3f;
 
     public GameObject PlayerNeck;
     public Vector2 VerticalClamp = new Vector2(-8, 30);
@@ -57,6 +58,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         AssignAnimationIDs();
     }
 
@@ -87,7 +90,8 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
             animator.SetFloat(m_animIDZoom, 1f, 0.5f, Time.deltaTime);
-            rigController.layers[0].rig.weight = 1;
+            rigController.layers[0].rig.weight += Time.deltaTime / aimDuration;
+            rigController.layers[2].rig.weight += Time.deltaTime / aimDuration;
 
             mousePosition.y = transform.position.y;
             Vector3 aimDirection = (mousePosition - transform.position).normalized;
@@ -105,7 +109,8 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
             animator.SetFloat(m_animIDZoom, 0f, 0.5f, Time.deltaTime);
-            rigController.layers[0].rig.weight = 0;
+            rigController.layers[0].rig.weight -= Time.deltaTime / aimDuration;
+            rigController.layers[2].rig.weight -= Time.deltaTime / aimDuration;
         }
     }
 
