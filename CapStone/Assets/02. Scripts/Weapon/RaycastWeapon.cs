@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class RaycastWeapon : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool isFiring = false;
+
+    public void StartFiring()
     {
-        
+        isFiring = true;
     }
 
     // Update is called once per frame
-    void Update()
+    public void StopFiring()
     {
-        
+        isFiring = false;
     }
 }
