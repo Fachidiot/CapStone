@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14132354, g: 0.18253663, b: 0.21633756, a: 1}
+  m_IndirectSpecularColor: {r: 0.017932627, g: 0.027650919, b: 0.03794283, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -717,9 +717,9 @@ Transform:
   - {fileID: 114601791}
   - {fileID: 148838724}
   - {fileID: 2081412210}
-  - {fileID: 787935258}
   - {fileID: 1146236333}
   - {fileID: 1746587900}
+  - {fileID: 787935258}
   - {fileID: 607167800}
   m_Father: {fileID: 474354753}
   m_RootOrder: 2
@@ -1939,7 +1939,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 415191432}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1146236334
 BoxCollider:
@@ -2400,14 +2400,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495186592}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.114842154, y: 0.3717219, z: -0.046399236, w: 0.9200441}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 14.23, y: 44, z: 0}
 --- !u!1 &1510355063
 GameObject:
   m_ObjectHideFlags: 0
@@ -2484,14 +2484,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1510355063}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.059864894, y: 0.9125051, z: -0.14452665, w: 0.37797198}
+  m_LocalPosition: {x: -5, y: 5, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 18, y: 135, z: 0}
 --- !u!1001 &1575751175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2850,7 +2850,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 415191432}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1746587901
 BoxCollider:

@@ -7,41 +7,44 @@ using UnityEngine.InputSystem;
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("Player")]
-    [Tooltip("Crouch speed of the character in m/s")]
-    public float DashDrag = 1.2f;
+    [Tooltip("웅크리기 속도 m/s")]
+    public float CrouchSpeed = 1.2f;
 
-    [Tooltip("Move speed of the character in m/s")]
+    [Tooltip("걷기 속도 m/s")]
     public float MoveSpeed = 2.0f;
 
-    [Tooltip("Sprint speed of the character in m/s")]
+    [Tooltip("뛰기 속도 in m/s")]
     public float SprintSpeed = 5.335f;
 
-    [Tooltip("Sprint speed of the character in m/s")]
+    [Tooltip("대쉬 거리")]
     public float DashDistance = 5;
 
-    [Tooltip("How fast the character turns to face movement direction")]
+    [Tooltip("캐릭터 회전 보간시간")]
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
 
-    [Tooltip("Acceleration and deceleration")]
+    [Tooltip("속도 변화값")]
     public float SpeedChangeRate = 10.0f;
 
+    [Space(10)]
+    [Tooltip("착지 사운드")]
     public AudioClip LandingAudioClip;
+    [Tooltip("발자국 사운드")]
     public AudioClip[] FootstepAudioClips;
     [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
     [Space(10)]
-    [Tooltip("The height the player can jump")]
+    [Tooltip("최대 점프 높이")]
     public float JumpHeight = 1.2f;
 
-    [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-    public float Gravity = -15.0f;
+    [Tooltip("캐릭터 중력값")]
+    public float Gravity = -9.18f;
 
     [Space(10)]
-    [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+    [Tooltip("점프 쿨타임")]
     public float JumpTimeout = 0.50f;
 
-    [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+    [Tooltip("추락 시작 딜레이값")]
     public float FallTimeout = 0.15f;
 
     [Header("Player Grounded")]
@@ -73,14 +76,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
 
-    // cinemachine
-    [SerializeField]
     float m_cinemachineTargetYaw;
     float m_cinemachineTargetPitch;
-
-    // neck
-    [SerializeField]
-    float m_neckX;
 
     // player
     protected Vector3 m_dashVelocity;
@@ -261,7 +258,6 @@ public class ThirdPersonController : MonoBehaviour
             if (m_rotateOnMove)
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
-
 
         Vector3 targetDirection = Quaternion.Euler(0.0f, m_targetRotation, 0.0f) * Vector3.forward;
 
