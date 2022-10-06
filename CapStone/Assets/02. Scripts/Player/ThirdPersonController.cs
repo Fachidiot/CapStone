@@ -16,9 +16,6 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("뛰기 속도 in m/s")]
     public float SprintSpeed = 5.335f;
 
-    [Tooltip("대쉬 거리")]
-    public float DashDistance = 5;
-
     [Tooltip("캐릭터 회전 보간시간")]
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
@@ -154,7 +151,6 @@ public class ThirdPersonController : MonoBehaviour
     private void Update()
     {
         GroundedCheck();
-        MouseClick();
         SkillSystem();
     }
 
@@ -341,36 +337,12 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    protected virtual void MouseClick()
-    {
-        //if (m_hasWeapon)
-        //{
-        //    animator.SetFloat(m_animIDZoom, input.mouseR ? 1 : 0);
-        //    animator.SetBool(m_animIDFire, input.mouseL);
-        //}
-        //// Zoom
-        //if (input.mouseR)
-        //{
-
-        //}
-
-        //// Attack Combo
-        //if (input.mouseL)
-        //{
-        //    if (m_hasWeapon)
-        //    {
-        //        animator.SetFloat(m_animIDZoom, 1);
-        //        weapon.Fire();
-        //    }
-        //}
-    }
-
     protected virtual void SkillSystem()
     {
         // Dash
         if (input.crouch)
         {
-            m_dashVelocity += Vector3.Scale(transform.forward, DashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime)));
+            //m_dashVelocity += Vector3.Scale(transform.forward, DashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime)));
 
             //gravity
             m_dashVelocity.y += Gravity * Time.deltaTime;
