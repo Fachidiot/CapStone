@@ -22,12 +22,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     [Range(1, 10)]
     public float aimSensitivity = 2f;
     public float aimDuration = 0.3f;
-
-    //public GameObject PlayerHand;
     [SerializeField]
-    List<Weapon> weaponList;
-    [SerializeField]
-    RaycastWeapon weapon;
+    ActiveWeapon WeaponManager;
 
     bool aimed = false;
 
@@ -43,11 +39,6 @@ public class ThirdPersonShooterController : MonoBehaviour
     CustomInput input;
     Animator animator;
     Vector2 screenCenterPoint;
-
-    int m_currentWeapon = 0;
-
-    bool m_prevHasWeapon = false;
-    bool m_hasWeapon = false;
 
     void Awake()
     {
@@ -126,21 +117,17 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     void Fire()
     {
+        if (!WeaponManager.isHasWeapon)
+            return;
         if (input.mouseL)
         {
             if (!input.mouseR)
                 return;
-            //animator.SetBool(m_animIDFire, true);
-            weapon.StartFiring();
-            if (weapon.isFiring)
-                weapon.UpdateFiring(Time.deltaTime);
-            //if (weaponList.Count > 0)
-            //    weaponList[m_currentWeapon].Fire();
+            WeaponManager.Fire();
         }
         else
         {
-            weapon.StopFiring();
-            //animator.SetBool(m_animIDFire, false);
+            WeaponManager.StopFire();
         }
     }
 

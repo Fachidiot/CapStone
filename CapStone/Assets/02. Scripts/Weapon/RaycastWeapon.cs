@@ -13,12 +13,14 @@ public class RaycastWeapon : MonoBehaviour
     }
     public bool isFiring = false;
     public int fireRate = 25;
-    public float bulletSpeed = 1000.0f;
-    public float bulletDrop = 0.0f;
+    public float BulletSpeed = 1000.0f;
+    public float BulletDrop = 0.0f;
+    public AnimationClip WeaponAnimation;
+    [Header("Effects")]
     public ParticleSystem muzzleFlash;
     public ParticleSystem hitEffect;
     public TrailRenderer tracerEffect;
-
+    [Header("Raycast")]
     public Transform raycastOrigin;
     public Transform raycastDestination;
 
@@ -26,12 +28,12 @@ public class RaycastWeapon : MonoBehaviour
     RaycastHit hitInfo;
     float accumulatedTime;
     List<RaycastBullet> bullets = new List<RaycastBullet>();
-    float maxLifeTime = 3.0f;
+    float maxLifeTime = 5.0f;
 
     Vector3 GetPosition(RaycastBullet bullet)
     {
         // p + v*t + 0.5 * g * t * t
-        Vector3 gravity = Vector3.down * bulletDrop;
+        Vector3 gravity = Vector3.down * BulletDrop;
         return (bullet.initialPosition) + (bullet.initialVelocity * bullet.time) + (0.5f * gravity * bullet.time * bullet.time);
     }
 
@@ -40,9 +42,9 @@ public class RaycastWeapon : MonoBehaviour
         RaycastBullet bullet = new RaycastBullet();
         bullet.initialPosition = position;
         bullet.initialVelocity = velocity;
+        bullet.time = 0.0f;
         bullet.tracer = Instantiate(tracerEffect, position, Quaternion.identity);
         bullet.tracer.AddPosition(position);
-        bullet.time = 0.0f;
         return bullet;
     }
 
@@ -82,7 +84,7 @@ public class RaycastWeapon : MonoBehaviour
 
     void DestroyBullets()
     {
-        bullets.RemoveAll(bullet => bullet.time > maxLifeTime);
+        bullets.RemoveAll(bullet => bullet.time >= maxLifeTime);
     }
 
     void RaycastSegment(Vector3 start, Vector3 end, RaycastBullet bullet)
@@ -93,7 +95,6 @@ public class RaycastWeapon : MonoBehaviour
         ray.direction = direction;
         if (Physics.Raycast(ray, out hitInfo, distance))
         {
-            //Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
             hitEffect.transform.position = hitInfo.point;
             hitEffect.transform.forward = hitInfo.normal;
             hitEffect.Emit(1);
@@ -103,6 +104,7 @@ public class RaycastWeapon : MonoBehaviour
         } else
         {
             bullet.tracer.transform.position = end;
+            bullet.time = maxLifeTime;
         }
     }
 
@@ -110,7 +112,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         muzzleFlash.Emit(1);
 
-        Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * bulletSpeed;
+        Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * BulletSpeed;
         var bullet = CreateBullet(raycastOrigin.position, velocity);
         bullets.Add(bullet);
     }
