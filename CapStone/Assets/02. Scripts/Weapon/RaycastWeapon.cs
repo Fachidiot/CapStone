@@ -90,7 +90,7 @@ public class RaycastWeapon : MonoBehaviour
         Vector3 direction = end - start;
         float distance = direction.magnitude;
         ray.origin = start;
-        ray.direction = end - start;
+        ray.direction = direction;
         if (Physics.Raycast(ray, out hitInfo, distance))
         {
             //Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
