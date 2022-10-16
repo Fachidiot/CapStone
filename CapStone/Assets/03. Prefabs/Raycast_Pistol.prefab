@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 380409600007814936}
   - component: {fileID: 378259960085786672}
   - component: {fileID: 367607482081814940}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SM_Wep_Pistol_02_Cylander_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 378284548223291946}
   - component: {fileID: 367825081410993074}
   - component: {fileID: 409189233302245138}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SM_Wep_Pistol_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 380403552251278050}
   - component: {fileID: 374221177827545562}
   - component: {fileID: 368615636022465888}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SM_Wep_Pistol_02_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 385409235942578480}
   - component: {fileID: 377386204397926574}
   - component: {fileID: 367878954363255396}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SM_Wep_Pistol_02_Hammer_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,9 +360,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2401842622606144787}
   - component: {fileID: 4940499756536902387}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Raycast_Pistol
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -401,9 +401,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFiring: 0
   fireRate: 30
-  BulletSpeed: 1000
-  BulletDrop: 0
-  WeaponAnimation: {fileID: 7400000, guid: 2b51e3bb4264e8841993ea7b803ef75f, type: 2}
+  bulletSpeed: 1000
+  bulletDrop: 0
+  weaponName: pistol
   muzzleFlash: {fileID: 8502468880189370008}
   hitEffect: {fileID: 8502468880597272835}
   tracerEffect: {fileID: 7639900659596576004, guid: d1c7bd9661349244796b58957c3c7112, type: 3}
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 8502468880189370014}
   - component: {fileID: 8502468880189370008}
   - component: {fileID: 8502468880189370009}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Gunshot_Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5213,7 +5213,7 @@ GameObject:
   - component: {fileID: 8502468880597272833}
   - component: {fileID: 8502468880597272835}
   - component: {fileID: 8502468880597272832}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Impact_Small_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5253,7 +5253,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -10096,7 +10096,7 @@ GameObject:
   - component: {fileID: 8502468880831751584}
   - component: {fileID: 8502468880831751586}
   - component: {fileID: 8502468880831751587}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Impact_Small_Dust_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10135,7 +10135,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -15039,7 +15039,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8502468882226466496}
   - component: {fileID: 8502468882226466499}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Gunshot_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

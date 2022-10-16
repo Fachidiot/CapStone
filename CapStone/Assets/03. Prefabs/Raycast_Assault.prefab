@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2401842622606144787}
   - component: {fileID: 4940499756536902387}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Raycast_Assault
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,9 +51,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFiring: 0
   fireRate: 30
-  BulletSpeed: 1000
-  BulletDrop: 0
-  WeaponAnimation: {fileID: 7400000, guid: 522f113cf95c25f449b3f1ab19a852c2, type: 2}
+  bulletSpeed: 1000
+  bulletDrop: 0
+  weaponName: rifle
   muzzleFlash: {fileID: 8502468880189370008}
   hitEffect: {fileID: 8502468880597272835}
   tracerEffect: {fileID: 7639900659596576004, guid: d1c7bd9661349244796b58957c3c7112, type: 3}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 8502468880189370014}
   - component: {fileID: 8502468880189370008}
   - component: {fileID: 8502468880189370009}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Gunshot_Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4969,9 +4969,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFiring: 0
   fireRate: 30
-  BulletSpeed: 1000
-  BulletDrop: 0
-  WeaponAnimation: {fileID: 0}
+  bulletSpeed: 1000
+  bulletDrop: 0
+  weaponName: 
   muzzleFlash: {fileID: 8502468880189370008}
   hitEffect: {fileID: 8502468880597272835}
   tracerEffect: {fileID: 7639900659596576004, guid: d1c7bd9661349244796b58957c3c7112, type: 3}
@@ -4988,7 +4988,7 @@ GameObject:
   - component: {fileID: 8502468880597272833}
   - component: {fileID: 8502468880597272835}
   - component: {fileID: 8502468880597272832}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Impact_Small_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5028,7 +5028,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -9871,7 +9871,7 @@ GameObject:
   - component: {fileID: 8502468880831751584}
   - component: {fileID: 8502468880831751586}
   - component: {fileID: 8502468880831751587}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Impact_Small_Dust_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9910,7 +9910,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -15146,7 +15146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8502468882226466496}
   - component: {fileID: 8502468882226466499}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FX_Gunshot_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

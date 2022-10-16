@@ -18,6 +18,7 @@ public class CustomInput : MonoBehaviour
 	public bool granade;
 	public bool interact;
 	public bool inventory;
+	public bool holster;
 
 	[Header("Movement Settings")]
 	public bool analogMovement;
@@ -99,6 +100,11 @@ public class CustomInput : MonoBehaviour
 		InventoryInput(value.isPressed);
 	}
 
+	public void OnHolster(InputValue value)
+	{
+		HolsterInput(value.isPressed);
+	}
+
 	public void MoveInput(Vector2 newMoveDirection)
 	{
 		move = newMoveDirection;
@@ -167,6 +173,11 @@ public class CustomInput : MonoBehaviour
 	public void InventoryInput(bool newInventoryState)
 	{
 		inventory = newInventoryState;
+	}
+
+	public void HolsterInput(bool newHolsterState)
+	{
+		holster = newHolsterState;
 	}
 
 	private void OnApplicationFocus(bool hasFocus)

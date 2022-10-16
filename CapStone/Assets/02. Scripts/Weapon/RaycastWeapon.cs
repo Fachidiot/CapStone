@@ -13,9 +13,9 @@ public class RaycastWeapon : MonoBehaviour
     }
     public bool isFiring = false;
     public int fireRate = 25;
-    public float BulletSpeed = 1000.0f;
-    public float BulletDrop = 0.0f;
-    public AnimationClip WeaponAnimation;
+    public float bulletSpeed = 1000.0f;
+    public float bulletDrop = 0.0f;
+    public string weaponName;
     [Header("Effects")]
     public ParticleSystem muzzleFlash;
     public ParticleSystem hitEffect;
@@ -33,7 +33,7 @@ public class RaycastWeapon : MonoBehaviour
     Vector3 GetPosition(RaycastBullet bullet)
     {
         // p + v*t + 0.5 * g * t * t
-        Vector3 gravity = Vector3.down * BulletDrop;
+        Vector3 gravity = Vector3.down * bulletDrop;
         return (bullet.initialPosition) + (bullet.initialVelocity * bullet.time) + (0.5f * gravity * bullet.time * bullet.time);
     }
 
@@ -112,7 +112,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         muzzleFlash.Emit(1);
 
-        Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * BulletSpeed;
+        Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * bulletSpeed;
         var bullet = CreateBullet(raycastOrigin.position, velocity);
         bullets.Add(bullet);
     }

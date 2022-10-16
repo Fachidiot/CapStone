@@ -95,13 +95,12 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
             aimed = true;
-            rigController.layers[0].rig.weight += Time.deltaTime / aimDuration;
-            rigController.layers[2].rig.weight += Time.deltaTime / aimDuration;
 
             mousePosition.y = transform.position.y;
             Vector3 aimDirection = (mousePosition - transform.position).normalized;
 
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+            WeaponManager.WeaponHolster(false);
         }
         else
         {
@@ -110,8 +109,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
             aimed = false;
-            rigController.layers[0].rig.weight -= Time.deltaTime / aimDuration;
-            rigController.layers[2].rig.weight -= Time.deltaTime / aimDuration;
+            WeaponManager.WeaponHolster(true);
         }
     }
 
