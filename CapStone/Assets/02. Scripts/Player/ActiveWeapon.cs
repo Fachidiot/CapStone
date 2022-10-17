@@ -23,7 +23,7 @@ public class ActiveWeapon : MonoBehaviour
         rigController.updateMode = AnimatorUpdateMode.AnimatePhysics;
         rigController.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
         rigController.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-        rigController.updateMode = AnimatorUpdateMode.Normal;
+        //rigController.updateMode = AnimatorUpdateMode.Normal;
         RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
         if (existingWeapon) {
             Equip(existingWeapon);
