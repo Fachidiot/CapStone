@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RaycastWeapon : MonoBehaviour
 {
@@ -13,19 +14,25 @@ public class RaycastWeapon : MonoBehaviour
     }
     public bool isFiring = false;
     public int fireRate = 25;
+    public float bulletPower = 30f;
+    public float bulletDistance = 100.0f;
     public float bulletSpeed = 1000.0f;
     public float bulletDrop = 0.0f;
     public string weaponName;
     [Header("Effects")]
     public ParticleSystem muzzleFlash;
-    public ParticleSystem hitEffect;
+    public GameObject hitEffect;
     public TrailRenderer tracerEffect;
     [Header("Raycast")]
     public Transform raycastOrigin;
     public Transform raycastDestination;
+    [Header("UI Radio")]
+    public int hitLayer;
+    public GameObject hitUI;
 
     Ray ray;
     RaycastHit hitInfo;
+    [SerializeField]
     float accumulatedTime;
     List<RaycastBullet> bullets = new List<RaycastBullet>();
     float maxLifeTime = 5.0f;
@@ -50,8 +57,13 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StartFiring()
     {
+        if (isFiring && accumulatedTime < 0.0f)
+            return;
+
         isFiring = true;
         accumulatedTime = 0.0f;
+        //if (lastAccumulatedTime < 0)
+        //    accumulatedTime = lastAccumulatedTime;
     }
 
     public void UpdateFiring(float deltaTime)
@@ -90,19 +102,24 @@ public class RaycastWeapon : MonoBehaviour
     void RaycastSegment(Vector3 start, Vector3 end, RaycastBullet bullet)
     {
         Vector3 direction = end - start;
-        float distance = direction.magnitude;
         ray.origin = start;
         ray.direction = direction;
-        if (Physics.Raycast(ray, out hitInfo, distance))
+        if (Physics.Raycast(ray, out hitInfo, bulletDistance))
         {
-            hitEffect.transform.position = hitInfo.point;
-            hitEffect.transform.forward = hitInfo.normal;
-            hitEffect.Emit(1);
+            GameObject obj = Instantiate(hitEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+            obj.transform.parent = hitInfo.transform;
+            //Debug.Log(hitInfo.transform.name);
+            if (hitInfo.rigidbody != null)
+            {
+                if (hitInfo.rigidbody.gameObject.layer == hitLayer)
+                    hitUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                hitInfo.rigidbody.AddForce(-hitInfo.normal * bulletPower);
+            }
+            Destroy(obj, 3f);
 
             bullet.tracer.transform.position = hitInfo.point;
             bullet.time = maxLifeTime;
-        } else
-        {
+        } else {
             bullet.tracer.transform.position = end;
             bullet.time = maxLifeTime;
         }
@@ -119,6 +136,14 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
+        StartCoroutine(StopFire());
+    }
+
+    IEnumerator StopFire()
+    {
+        yield return new WaitForSeconds(-accumulatedTime);
+
         isFiring = false;
+        StopAllCoroutines();
     }
 }

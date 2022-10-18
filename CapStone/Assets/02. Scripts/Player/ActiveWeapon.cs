@@ -5,6 +5,7 @@ using UnityEditor.Animations;
 
 public class ActiveWeapon : MonoBehaviour
 {
+    public GameObject hitUI;
     public Transform Target;
     public Transform weaponParent;
     public UnityEngine.Animations.Rigging.Rig handIK;
@@ -47,7 +48,8 @@ public class ActiveWeapon : MonoBehaviour
     }
 
     public void StopFire() {
-        weapon.StopFiring();
+        if (weapon.isFiring)
+            weapon.StopFiring();
     }
 
     public void Equip(RaycastWeapon newWeapon) {
@@ -59,6 +61,7 @@ public class ActiveWeapon : MonoBehaviour
         weapon.transform.parent = weaponParent;
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
+        weapon.hitUI = hitUI;
         rigController.Play("equip_" + weapon.weaponName);
     }
 }

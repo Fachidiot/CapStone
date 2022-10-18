@@ -28,9 +28,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     bool aimed = false;
 
     //Animation ID
-    int m_animIDFire;
     int m_animIDZoom;
-    int m_animIDHasWeapon;
     int m_animIDHorizontal;
     int m_animIDVertical;
 
@@ -73,6 +71,10 @@ public class ThirdPersonShooterController : MonoBehaviour
         //m_prevHasWeapon = m_hasWeapon;
         Zoom(GetMousePosition());
         MoveAnimation();
+    }
+
+    private void LateUpdate()
+    {
         Fire();
     }
 
@@ -122,8 +124,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             if (!input.mouseR)
                 return;
             WeaponManager.Fire();
-        }
-        else
+        } else
         {
             WeaponManager.StopFire();
         }
