@@ -17,7 +17,7 @@ public class RenderCubemapWizard : ScriptableWizard
     {
         Cubemap cubemap = new Cubemap(512, TextureFormat.ARGB32, false);
         camera.RenderToCubemap(cubemap);
-        AssetDatabase.CreateAsset(cubemap, $"Assets/Prefabs/Cubemap/{camera.name}.cubmap");
+        AssetDatabase.CreateAsset(cubemap, $"Assets/03. Prefabs/Cubemap/{camera.name}.cubmap.asset");
     }
 
     [MenuItem("Toolbox/Cubemap Wizard")]

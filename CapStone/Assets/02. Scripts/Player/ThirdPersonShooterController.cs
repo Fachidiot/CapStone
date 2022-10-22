@@ -71,6 +71,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         //m_prevHasWeapon = m_hasWeapon;
         Zoom(GetMousePosition());
         MoveAnimation();
+        SwitchWeapon();
     }
 
     private void LateUpdate()
@@ -127,6 +128,20 @@ public class ThirdPersonShooterController : MonoBehaviour
         } else
         {
             WeaponManager.StopFire();
+        }
+    }
+
+    void SwitchWeapon()
+    {
+        if (input.alpha1)
+        {
+            WeaponManager.SwitchWeapon(0);
+            input.alpha1 = false;
+        }
+        if (input.alpha2)
+        {
+            WeaponManager.SwitchWeapon(1);
+            input.alpha2 = false;
         }
     }
 

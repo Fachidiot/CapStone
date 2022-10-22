@@ -11,21 +11,27 @@ public class RaycastWeapon : MonoBehaviour
         public Vector3 initialPosition;
         public Vector3 initialVelocity;
         public TrailRenderer tracer;
+        public int bounce;
     }
+    public ActiveWeapon.WeaponSlot weaponSlot;
     public bool isFiring = false;
     public int fireRate = 25;
     public float bulletPower = 30f;
     public float bulletDistance = 100.0f;
     public float bulletSpeed = 1000.0f;
     public float bulletDrop = 0.0f;
+    public int maxBounces = 0;
     public string weaponName;
+
     [Header("Effects")]
     public ParticleSystem muzzleFlash;
     public GameObject hitEffect;
     public TrailRenderer tracerEffect;
+
     [Header("Raycast")]
     public Transform raycastOrigin;
     public Transform raycastDestination;
+
     [Header("UI Radio")]
     public int hitLayer;
     public GameObject hitUI;
@@ -52,6 +58,7 @@ public class RaycastWeapon : MonoBehaviour
         bullet.time = 0.0f;
         bullet.tracer = Instantiate(tracerEffect, position, Quaternion.identity);
         bullet.tracer.AddPosition(position);
+        bullet.bounce = maxBounces;
         return bullet;
     }
 
@@ -104,24 +111,33 @@ public class RaycastWeapon : MonoBehaviour
         Vector3 direction = end - start;
         ray.origin = start;
         ray.direction = direction;
+
         if (Physics.Raycast(ray, out hitInfo, bulletDistance))
         {
-            GameObject obj = Instantiate(hitEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-            obj.transform.parent = hitInfo.transform;
-            //Debug.Log(hitInfo.transform.name);
+            GameObject effect = Instantiate(hitEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+            effect.transform.parent = hitInfo.transform;
             if (hitInfo.rigidbody != null)
             {
                 if (hitInfo.rigidbody.gameObject.layer == hitLayer)
                     hitUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
                 hitInfo.rigidbody.AddForce(-hitInfo.normal * bulletPower);
             }
-            Destroy(obj, 3f);
+            Destroy(effect, 3f);
 
             bullet.tracer.transform.position = hitInfo.point;
             bullet.time = maxLifeTime;
-        } else {
-            bullet.tracer.transform.position = end;
-            bullet.time = maxLifeTime;
+
+            if (bullet.bounce > 0)
+            {
+                bullet.time = 0;
+                bullet.initialPosition = hitInfo.point;
+                bullet.initialVelocity = Vector3.Reflect(bullet.initialVelocity, hitInfo.normal);
+                bullet.bounce--;
+            }
+
+            var rb2d = hitInfo.collider.GetComponent<Rigidbody>();
+            if (rb2d)
+                rb2d.AddForceAtPosition(ray.direction * 20, hitInfo.point, ForceMode.Impulse);
         }
     }
 

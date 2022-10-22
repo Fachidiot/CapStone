@@ -14,7 +14,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -24,11 +24,21 @@ Material:
         m_Texture: {fileID: 8900000, guid: 179b61066047f774d9d4a977585c6a6b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Cubemap_01:
+        m_Texture: {fileID: 8900000, guid: 546539285494d457e98fe0d97b6d2441, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cubemap_02:
+        m_Texture: {fileID: 8900000, guid: 179b61066047f774d9d4a977585c6a6b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    m_Colors: []
+    - _Depth: 0.1
+    m_Colors:
+    - _Tiling: {r: 2, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8917028524311578122
 MonoBehaviour:
