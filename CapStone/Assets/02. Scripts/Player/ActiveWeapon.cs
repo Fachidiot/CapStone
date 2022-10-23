@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Animations;
 
 public class ActiveWeapon : MonoBehaviour
 {
@@ -14,7 +13,6 @@ public class ActiveWeapon : MonoBehaviour
     public GameObject ammoCountUI;
     public Transform Target;
     public Transform[] weaponSlots;
-    public Cinemachine.CinemachineFreeLook playerCamera;
 
     public Animator rigController;
     public bool isHasWeapon
@@ -85,7 +83,7 @@ public class ActiveWeapon : MonoBehaviour
 
         weapon = newWeapon;
         weapon.raycastDestination = Target;
-        weapon.recoil.playerCamera = playerCamera;
+        weapon.rigController = rigController;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.hitUI = hitUI;
         weapon.ammoCountUI = ammoCountUI;

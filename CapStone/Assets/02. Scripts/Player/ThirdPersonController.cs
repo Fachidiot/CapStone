@@ -33,43 +33,31 @@ public class ThirdPersonController : MonoBehaviour
     [Space(10)]
     [Tooltip("최대 점프 높이")]
     public float JumpHeight = 1.2f;
-
     [Tooltip("캐릭터 중력값")]
     public float Gravity = -9.18f;
-
     [Space(10)]
     [Tooltip("점프 쿨타임")]
     public float JumpTimeout = 0.50f;
-
     [Tooltip("추락 시작 딜레이값")]
     public float FallTimeout = 0.15f;
-
     [Header("Player Grounded")]
     [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
     public bool Grounded = true;
-
     [Tooltip("Useful for rough ground")]
     public float GroundedOffset = -0.14f;
-
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
     public float GroundedRadius = 0.28f;
-
     [Tooltip("What layers the character uses as ground")]
     public LayerMask GroundLayers;
-
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
     public GameObject CinemachineCameraTarget;
-
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
-
     [Tooltip("How far in degrees can you move the camera down")]
     public float BottomClamp = -30.0f;
-
     [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
     public float CameraAngleOverride = 0.0f;
-
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
 

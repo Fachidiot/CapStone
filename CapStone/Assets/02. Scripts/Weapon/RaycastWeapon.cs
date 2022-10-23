@@ -14,8 +14,11 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer tracer;
         public int bounce;
     }
+
     public ActiveWeapon.WeaponSlot weaponSlot;
-    public bool isFiring = false;
+    [HideInInspector] public bool isFiring = false;
+    [HideInInspector] public Animator rigController;
+    [Header("Weapon Informations")]
     public int fireRate = 25;
     public float bulletPower = 30f;
     public float bulletDistance = 100.0f;
@@ -23,6 +26,13 @@ public class RaycastWeapon : MonoBehaviour
     public float bulletDrop = 0.0f;
     public int maxBounces = 0;
     public string weaponName;
+
+    int ammoCount;
+    public int maxAmmoCount;
+    [Header("Recoil System")]
+    [Range(0, 10f)] public float maxRecoilTime;
+    [Range(0, 7f)] public float recoilAmountVertical;
+    [Range(0, 3f)] public float recoilAmountHorizontal;
 
     [Header("Effects")]
     public ParticleSystem muzzleFlash;
@@ -34,7 +44,6 @@ public class RaycastWeapon : MonoBehaviour
     [Header("Raycast")]
     public Transform raycastOrigin;
     public Transform raycastDestination;
-    public WeaponRecoil recoil;
     public GameObject magazine;
 
     [Header("UI Radio")]
@@ -44,15 +53,15 @@ public class RaycastWeapon : MonoBehaviour
 
     Ray ray;
     RaycastHit hitInfo;
-    float accumulatedTime;
     List<RaycastBullet> bullets = new List<RaycastBullet>();
-    float maxLifeTime = 5.0f;
-    public int maxAmmoCount;
-    public int ammoCount;
+    ThirdPersonShooterController m_tpsController;
+    float m_accumulatedTime;
+    float m_maxLifeTime = 5.0f;
+    Vector2 m_currentRecoilPos;
+    public float m_timePressed;
 
     void Awake()
     {
-        recoil = GetComponent<WeaponRecoil>();
         ammoCount = maxAmmoCount;
     }
 
@@ -83,29 +92,30 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StartFiring()
     {
-        if (isFiring && accumulatedTime < 0.0f || ammoCount <= 0)
+        if (isFiring && m_accumulatedTime < 0.0f || ammoCount <= 0)
             return;
 
         if (loopSound)
             fireSound.Play();
         isFiring = true;
-        accumulatedTime = 0.0f;
-        //if (lastAccumulatedTime < 0)
-        //    accumulatedTime = lastAccumulatedTime;
+        m_accumulatedTime = 0.0f;
+        //if (lastm_accumulatedTime < 0)
+        //    m_accumulatedTime = lastm_accumulatedTime;
     }
 
     public void UpdateFiring(float deltaTime)
     {
         if (ammoCount <= 0)
             return;
-        accumulatedTime += deltaTime;
+        m_accumulatedTime += deltaTime;
+        m_timePressed += deltaTime;
         float fireInterval = 1.0f / fireRate;
-        while(accumulatedTime >= 0.0f)
+        while(m_accumulatedTime >= 0.0f)
         {
             if (!loopSound)
                 fireSound.Play();
             FireBullet();
-            accumulatedTime -= fireInterval;
+            m_accumulatedTime -= fireInterval;
         }
 
         ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
@@ -115,6 +125,16 @@ public class RaycastWeapon : MonoBehaviour
     {
         SimulateBullets(deltaTime);
         DestroyBullets();
+    }
+
+    void RecoilMath() {
+        m_currentRecoilPos = new Vector2(
+            ((Random.value - 0.5f)/2) * recoilAmountHorizontal, 
+            ((Random.value - 0.5f) /2) * (m_timePressed >= maxRecoilTime ? recoilAmountVertical / 4 : recoilAmountVertical));
+            // m_tpsController.recoilCameraYRotation -= Mathf.Abs(m_currentRecoilPos.y);
+            // m_tpsController.recoilCameraXRotation -= m_currentRecoilPos.x;
+            
+        rigController.Play("weapon_recoil_" + weaponName, 1, 0.0f);
     }
 
     void SimulateBullets(float deltaTime)
@@ -130,7 +150,7 @@ public class RaycastWeapon : MonoBehaviour
 
     void DestroyBullets()
     {
-        bullets.RemoveAll(bullet => bullet.time >= maxLifeTime);
+        bullets.RemoveAll(bullet => bullet.time >= m_maxLifeTime);
     }
 
     void RaycastSegment(Vector3 start, Vector3 end, RaycastBullet bullet)
@@ -152,7 +172,7 @@ public class RaycastWeapon : MonoBehaviour
             Destroy(effect, 3f);
 
             bullet.tracer.transform.position = hitInfo.point;
-            bullet.time = maxLifeTime;
+            bullet.time = m_maxLifeTime;
 
             if (bullet.bounce > 0)
             {
@@ -174,10 +194,10 @@ public class RaycastWeapon : MonoBehaviour
 
         Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * bulletSpeed;
         var bullet = CreateBullet(raycastOrigin.position, velocity);
+        RecoilMath();
+        
         bullets.Add(bullet);
         ammoCount--;
-
-        recoil.GenerateRecoil();
     }
 
     public void Reload()
@@ -193,9 +213,10 @@ public class RaycastWeapon : MonoBehaviour
 
     IEnumerator StopFire()
     {
-        yield return new WaitForSeconds(-accumulatedTime);
+        yield return new WaitForSeconds(-m_accumulatedTime);
 
         isFiring = false;
+        m_timePressed = 0;
         StopAllCoroutines();
 
         if (loopSound)

@@ -24,6 +24,10 @@ public class ThirdPersonShooterController : MonoBehaviour
     public float aimDuration = 0.3f;
     [SerializeField]
     ActiveWeapon WeaponManager;
+    [HideInInspector] public float recoilCameraXRotation;
+    [HideInInspector] public float recoilCameraYRotation;
+    float m_currentCameraXRotation;
+    float m_currentCameraYRotation;
 
     bool aimed = false;
 
@@ -63,20 +67,23 @@ public class ThirdPersonShooterController : MonoBehaviour
         AssignAnimationIDs();
     }
 
+    void FixedUpdate() {
+        MoveAnimation();
+    }
+
     void Update()
     {
         //m_hasWeapon = weapon != null;
         //if (m_hasWeapon != m_prevHasWeapon)
         //    animator.SetBool(m_animIDHasWeapon, m_hasWeapon);
         //m_prevHasWeapon = m_hasWeapon;
-        Zoom(GetMousePosition());
-        MoveAnimation();
         SwitchWeapon();
         Reload();
     }
 
     private void LateUpdate()
     {
+        Zoom(GetMousePosition());
         Fire();
     }
 
@@ -91,6 +98,13 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     void Zoom(Vector3 mousePosition)
     {
+        // Do Recoil
+        // m_currentCameraYRotation = Mathf.SmoothDamp(m_currentCameraYRotation, recoilCameraYRotation, ref rotationYVelocity, yRotationSpeed);
+        // m_currentCameraXRotation = Mathf.SmoothDamp(m_currentCameraXRotation, recoilCameraXRotation, ref rotationXVelocity, xRotationSpeed);
+
+        // transform.rotation = Quaternion.Euler(0, m_currentCameraYRotation, 0);
+        // camera.localRotation = Quaternion.Euler(m_currentCameraXRotation, 0, zRotation);
+
         // if Player do zoom
         if (input.mouseR)
         {
@@ -150,6 +164,12 @@ public class ThirdPersonShooterController : MonoBehaviour
             WeaponManager.SwitchWeapon(1);
             input.alpha2 = false;
         }
+    }
+
+    void Recoiling() {
+        if (!WeaponManager.isHasWeapon)
+            return;
+        
     }
 
     Vector3 GetMousePosition()
