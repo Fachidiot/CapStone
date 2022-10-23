@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2401842622606144787}
   - component: {fileID: 4940499756536902387}
+  - component: {fileID: 9162602954965222596}
+  - component: {fileID: 3440273686418268630}
+  - component: {fileID: 6459794854664333264}
   m_Layer: 2
   m_Name: Raycast_Assault
   m_TagString: Weapon
@@ -47,20 +50,193 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc338711469aff1418b5477af3fb0cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSlot: 0
   isFiring: 0
-  fireRate: 30
+  fireRate: 15
   bulletPower: 600
   bulletDistance: 150
   bulletSpeed: 1000
   bulletDrop: 20
+  maxBounces: 0
   weaponName: rifle
   muzzleFlash: {fileID: 8502468880189370008}
   hitEffect: {fileID: 2757890080344115460, guid: 29f9e608bcf5a4792be9445ce1dc2d3d, type: 3}
   tracerEffect: {fileID: 7639900659596576004, guid: d1c7bd9661349244796b58957c3c7112, type: 3}
+  fireSound: {fileID: 6459794854664333264}
+  loopSound: 1
   raycastOrigin: {fileID: 8502468881977904646}
   raycastDestination: {fileID: 0}
+  recoil: {fileID: 0}
+  magazine: {fileID: 8502468881243662198}
   hitLayer: 3
   hitUI: {fileID: 0}
+  maxAmmoCount: 30
+  ammoCount: 0
+--- !u!114 &9162602954965222596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8353672728315103339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8391f6859da3424db84ebe40ad96a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
+  cameraShake: {fileID: 0}
+  verticalRecoil: 10
+  duration: 0.1
+--- !u!114 &3440273686418268630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8353672728315103339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 3
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 11400000, guid: 70644968118282544b4189c7c81481c9, type: 2}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 1000
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!82 &6459794854664333264
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8353672728315103339}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 8ea98215c625b884ea7bdadb9f0333c0, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8502468880189370015
 GameObject:
   m_ObjectHideFlags: 0
@@ -4969,20 +5145,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc338711469aff1418b5477af3fb0cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSlot: 0
   isFiring: 0
   fireRate: 30
   bulletPower: 30
   bulletDistance: 100
   bulletSpeed: 1000
   bulletDrop: 0
+  maxBounces: 0
   weaponName: 
   muzzleFlash: {fileID: 8502468880189370008}
   hitEffect: {fileID: 0}
   tracerEffect: {fileID: 7639900659596576004, guid: d1c7bd9661349244796b58957c3c7112, type: 3}
+  fireSound: {fileID: 0}
+  loopSound: 0
   raycastOrigin: {fileID: 8502468881977904646}
   raycastDestination: {fileID: 0}
+  recoil: {fileID: 0}
+  magazine: {fileID: 0}
   hitLayer: 0
   hitUI: {fileID: 0}
+  maxAmmoCount: 0
+  ammoCount: 0
 --- !u!1 &8502468881243662198
 GameObject:
   m_ObjectHideFlags: 0
@@ -5091,8 +5275,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8502468881424688767}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0005372742, y: 0.16355793, z: 0.09684246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.0005372742, y: 0.16355793, z: 0.09684247}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

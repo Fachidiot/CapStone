@@ -72,6 +72,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         Zoom(GetMousePosition());
         MoveAnimation();
         SwitchWeapon();
+        Reload();
     }
 
     private void LateUpdate()
@@ -129,6 +130,12 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             WeaponManager.StopFire();
         }
+    }
+
+    void Reload()
+    {
+        if (input.reload)
+            WeaponManager.Reload();
     }
 
     void SwitchWeapon()

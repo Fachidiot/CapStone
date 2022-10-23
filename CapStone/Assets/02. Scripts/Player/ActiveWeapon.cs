@@ -11,8 +11,11 @@ public class ActiveWeapon : MonoBehaviour
         Secondary = 1
     }
     public GameObject hitUI;
+    public GameObject ammoCountUI;
     public Transform Target;
     public Transform[] weaponSlots;
+    public Cinemachine.CinemachineFreeLook playerCamera;
+
     public Animator rigController;
     public bool isHasWeapon
     {
@@ -66,6 +69,14 @@ public class ActiveWeapon : MonoBehaviour
             weapon.StopFiring();
     }
 
+    public void Reload()
+    {
+        var weapon = GetWeapon(activeWeaponIndex);
+        if (!weapon)
+            return;
+        weapon.Reload();
+    }
+
     public void Equip(RaycastWeapon newWeapon) {
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
         var weapon = GetWeapon(weaponSlotIndex);
@@ -74,8 +85,10 @@ public class ActiveWeapon : MonoBehaviour
 
         weapon = newWeapon;
         weapon.raycastDestination = Target;
+        weapon.recoil.playerCamera = playerCamera;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.hitUI = hitUI;
+        weapon.ammoCountUI = ammoCountUI;
 
         equipped_weapons[weaponSlotIndex] = weapon;
 
