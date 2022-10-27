@@ -67,16 +67,13 @@ public class ThirdPersonShooterController : MonoBehaviour
         AssignAnimationIDs();
     }
 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
         MoveAnimation();
     }
 
     void Update()
     {
-        //m_hasWeapon = weapon != null;
-        //if (m_hasWeapon != m_prevHasWeapon)
-        //    animator.SetBool(m_animIDHasWeapon, m_hasWeapon);
-        //m_prevHasWeapon = m_hasWeapon;
         SwitchWeapon();
         Reload();
     }
@@ -140,7 +137,8 @@ public class ThirdPersonShooterController : MonoBehaviour
             if (!input.mouseR)
                 return;
             WeaponManager.Fire();
-        } else
+        }
+        else
         {
             WeaponManager.StopFire();
         }
@@ -149,7 +147,10 @@ public class ThirdPersonShooterController : MonoBehaviour
     void Reload()
     {
         if (input.reload)
+        {
             WeaponManager.Reload();
+            input.reload = false;
+        }
     }
 
     void SwitchWeapon()
@@ -166,10 +167,59 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
     }
 
-    void Recoiling() {
+    void Recoiling()
+    {
         if (!WeaponManager.isHasWeapon)
             return;
-        
+    }
+
+    void SkillSystem()
+    {
+        // Dash
+        if (input.crouch)
+        {
+            //m_dashVelocity += Vector3.Scale(transform.forward, DashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime)));
+
+            //gravity
+            // m_dashVelocity.y += Gravity * Time.deltaTime;
+
+            // //dash ground drags
+            // m_dashVelocity.x /= 1 + Time.deltaTime * 10;
+            // m_dashVelocity.y /= 1 + Time.deltaTime * 10;
+            // m_dashVelocity.z /= 1 + Time.deltaTime * 10;
+
+            // controller.Move(m_dashVelocity * Time.deltaTime);
+            input.crouch = false;
+        }
+
+        // Skill1
+        if (input.skill1)
+        {
+            // 스킬 스크립트
+            // 스킬 생성
+            input.skill1 = false;
+        }
+
+        if (input.skill2)
+        {
+            // 스킬 스크립트
+            // 스킬 생성
+            input.skill2 = false;
+        }
+
+        if (input.ultimate)
+        {
+            // 궁극기 스크립트
+            // 궁극기 생성
+            input.ultimate = false;
+        }
+
+        if (input.reload)
+        {
+            // 장전 스크립트
+            // 해당 총기 장전
+            input.reload = false;
+        }
     }
 
     Vector3 GetMousePosition()

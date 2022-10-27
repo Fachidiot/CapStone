@@ -11,6 +11,7 @@ public class ActiveWeapon : MonoBehaviour
     }
     public GameObject hitUI;
     public GameObject ammoCountUI;
+
     public Transform Target;
     public Transform[] weaponSlots;
 
@@ -29,8 +30,10 @@ public class ActiveWeapon : MonoBehaviour
         rigController.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
         rigController.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         //rigController.updateMode = AnimatorUpdateMode.Normal;
+
         RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
-        if (existingWeapon) {
+        if (existingWeapon)
+        {
             Equip(existingWeapon);
         }
     }
@@ -50,16 +53,14 @@ public class ActiveWeapon : MonoBehaviour
     public void Fire()
     {
         var weapon = GetWeapon(activeWeaponIndex);
-        if (weapon) {
-            weapon.StartFiring();
-            if (weapon.isFiring) {
-                weapon.UpdateFiring(Time.deltaTime);
-            }
-            weapon.UpdateBullets(Time.deltaTime);
+        if (weapon)
+        {
+            weapon.Fire();
         }
     }
 
-    public void StopFire() {
+    public void StopFire()
+    {
         var weapon = GetWeapon(activeWeaponIndex);
         if (!weapon)
             return;
@@ -75,7 +76,8 @@ public class ActiveWeapon : MonoBehaviour
         weapon.Reload();
     }
 
-    public void Equip(RaycastWeapon newWeapon) {
+    public void Equip(RaycastWeapon newWeapon)
+    {
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
         var weapon = GetWeapon(weaponSlotIndex);
         if (weapon)

@@ -18,6 +18,8 @@ public class RaycastWeapon : MonoBehaviour
     public ActiveWeapon.WeaponSlot weaponSlot;
     [HideInInspector] public bool isFiring = false;
     [HideInInspector] public Animator rigController;
+    [SerializeField]
+    LayerMask bulletColliderLayerMask = new LayerMask();
     [Header("Weapon Informations")]
     public int fireRate = 25;
     public float bulletPower = 30f;
@@ -71,6 +73,14 @@ public class RaycastWeapon : MonoBehaviour
             ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
     }
 
+    public void Fire()
+    {
+        StartFiring();
+        if (isFiring)
+            UpdateFiring(Time.deltaTime);
+        UpdateBullets(Time.deltaTime);
+    }
+
     Vector3 GetPosition(RaycastBullet bullet)
     {
         // p + v*t + 0.5 * g * t * t
@@ -90,7 +100,7 @@ public class RaycastWeapon : MonoBehaviour
         return bullet;
     }
 
-    public void StartFiring()
+    void StartFiring()
     {
         if (isFiring && m_accumulatedTime < 0.0f || ammoCount <= 0)
             return;
@@ -103,14 +113,14 @@ public class RaycastWeapon : MonoBehaviour
         //    m_accumulatedTime = lastm_accumulatedTime;
     }
 
-    public void UpdateFiring(float deltaTime)
+    void UpdateFiring(float deltaTime)
     {
         if (ammoCount <= 0)
             return;
         m_accumulatedTime += deltaTime;
         m_timePressed += deltaTime;
         float fireInterval = 1.0f / fireRate;
-        while(m_accumulatedTime >= 0.0f)
+        while (m_accumulatedTime >= 0.0f)
         {
             if (!loopSound)
                 fireSound.Play();
@@ -121,19 +131,31 @@ public class RaycastWeapon : MonoBehaviour
         ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
     }
 
-    public void UpdateBullets(float deltaTime)
+    void UpdateBullets(float deltaTime)
     {
         SimulateBullets(deltaTime);
         DestroyBullets();
     }
 
-    void RecoilMath() {
+    public void Reload()
+    {
+        if (ammoCount != maxAmmoCount)
+        {
+            rigController.SetTrigger("reload_weapon");
+
+            ammoCount = maxAmmoCount;
+            ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
+        }
+    }
+
+    void RecoilMath()
+    {
         m_currentRecoilPos = new Vector2(
-            ((Random.value - 0.5f)/2) * recoilAmountHorizontal, 
-            ((Random.value - 0.5f) /2) * (m_timePressed >= maxRecoilTime ? recoilAmountVertical / 4 : recoilAmountVertical));
-            // m_tpsController.recoilCameraYRotation -= Mathf.Abs(m_currentRecoilPos.y);
-            // m_tpsController.recoilCameraXRotation -= m_currentRecoilPos.x;
-            
+            ((Random.value - 0.5f) / 2) * recoilAmountHorizontal,
+            ((Random.value - 0.5f) / 2) * (m_timePressed >= maxRecoilTime ? recoilAmountVertical / 4 : recoilAmountVertical));
+        // m_tpsController.recoilCameraYRotation -= Mathf.Abs(m_currentRecoilPos.y);
+        // m_tpsController.recoilCameraXRotation -= m_currentRecoilPos.x;
+
         rigController.Play("weapon_recoil_" + weaponName, 1, 0.0f);
     }
 
@@ -159,7 +181,7 @@ public class RaycastWeapon : MonoBehaviour
         ray.origin = start;
         ray.direction = direction;
 
-        if (Physics.Raycast(ray, out hitInfo, bulletDistance))
+        if (Physics.Raycast(ray, out hitInfo, bulletDistance, bulletColliderLayerMask))
         {
             GameObject effect = Instantiate(hitEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             effect.transform.parent = hitInfo.transform;
@@ -186,6 +208,11 @@ public class RaycastWeapon : MonoBehaviour
             if (rb2d)
                 rb2d.AddForceAtPosition(ray.direction * 20, hitInfo.point, ForceMode.Impulse);
         }
+        else
+        {
+            bullet.tracer.transform.position = hitInfo.point;
+            bullet.time = m_maxLifeTime;
+        }
     }
 
     void FireBullet()
@@ -195,15 +222,18 @@ public class RaycastWeapon : MonoBehaviour
         Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * bulletSpeed;
         var bullet = CreateBullet(raycastOrigin.position, velocity);
         RecoilMath();
-        
+
         bullets.Add(bullet);
         ammoCount--;
     }
 
-    public void Reload()
+    void OnReload(AnimationEvent animationEvent)
     {
-        ammoCount = maxAmmoCount;
-        ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            ammoCount = maxAmmoCount;
+            ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
+        }
     }
 
     public void StopFiring()

@@ -116,7 +116,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Start()
     {
         m_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-        
+
         if (animator == null)
             m_hasAnimator = TryGetComponent(out animator);
         controller = GetComponent<CharacterController>();
@@ -139,7 +139,6 @@ public class ThirdPersonController : MonoBehaviour
     private void Update()
     {
         GroundedCheck();
-        SkillSystem();
     }
 
     private void LateUpdate()
@@ -193,7 +192,7 @@ public class ThirdPersonController : MonoBehaviour
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = input.sprint ? SprintSpeed * 6 : MoveSpeed * 6;
+        float targetSpeed = input.sprint && !input.mouseR ? SprintSpeed * 6 : MoveSpeed * 6;
         // targetSpeed = input.crouch ? DashDrag : targetSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
@@ -322,55 +321,6 @@ public class ThirdPersonController : MonoBehaviour
         if (m_verticalVelocity < m_terminalVelocity)
         {
             m_verticalVelocity += Gravity * Time.deltaTime;
-        }
-    }
-
-    protected virtual void SkillSystem()
-    {
-        // Dash
-        if (input.crouch)
-        {
-            //m_dashVelocity += Vector3.Scale(transform.forward, DashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime + 1)) / -Time.deltaTime)));
-
-            //gravity
-            m_dashVelocity.y += Gravity * Time.deltaTime;
-
-            //dash ground drags
-            m_dashVelocity.x /= 1 + Time.deltaTime * 10;
-            m_dashVelocity.y /= 1 + Time.deltaTime * 10;
-            m_dashVelocity.z /= 1 + Time.deltaTime * 10;
-
-            controller.Move(m_dashVelocity * Time.deltaTime);
-            input.crouch = false;
-        }
-
-        // Skill1
-        if (input.skill1)
-        {
-            // 스킬 스크립트
-            // 스킬 생성
-            input.skill1 = false;
-        }
-
-        if (input.skill2)
-        {
-            // 스킬 스크립트
-            // 스킬 생성
-            input.skill2 = false;
-        }
-
-        if (input.ultimate)
-        {
-            // 궁극기 스크립트
-            // 궁극기 생성
-            input.ultimate = false;
-        }
-
-        if (input.reload)
-        {
-            // 장전 스크립트
-            // 해당 총기 장전
-            input.reload = false;
         }
     }
 
