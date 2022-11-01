@@ -116,8 +116,6 @@ public class NetworkTPController : NetworkBehaviour
 
     private void Start()
     {
-        m_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-
         if (animator == null)
             m_hasAnimator = TryGetComponent(out animator);
         controller = GetComponent<CharacterController>();
@@ -125,6 +123,8 @@ public class NetworkTPController : NetworkBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         AssignAnimationIDs();
+
+        m_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
         // reset our timeouts on start
         m_jumpTimeoutDelta = JumpTimeout;
