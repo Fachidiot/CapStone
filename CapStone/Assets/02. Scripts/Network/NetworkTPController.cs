@@ -107,31 +107,24 @@ public class NetworkTPController : NetworkBehaviour
 
     private void Awake()
     {
-        m_hasAnimator = animator != null;
-
-        if (!IsOwner)
-            return;
-
         // get a reference to our main camera
         if (mainCamera == null)
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+
+        m_hasAnimator = animator != null;
     }
 
     private void Start()
     {
-        if (animator == null)
-            m_hasAnimator = TryGetComponent(out animator);
-
-        AssignAnimationIDs();
-
-        if (!IsOwner)
-            return;
-
         m_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
+        if (animator == null)
+            m_hasAnimator = TryGetComponent(out animator);
+        controller = GetComponent<CharacterController>();
         input = GetComponent<CustomInput>();
         playerInput = GetComponent<PlayerInput>();
-        controller = GetComponent<CharacterController>();
+
+        AssignAnimationIDs();
 
         // reset our timeouts on start
         m_jumpTimeoutDelta = JumpTimeout;
@@ -140,10 +133,9 @@ public class NetworkTPController : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        JumpAndGravity();
         if (!IsOwner)
             return;
-
-        JumpAndGravity();
         Move();
     }
 
@@ -154,10 +146,7 @@ public class NetworkTPController : NetworkBehaviour
 
     private void LateUpdate()
     {
-        if (!IsOwner)
-            return;
-
-        // CameraRotation();
+        CameraRotation();
     }
 
     // Animator Parameter ID값 설정
