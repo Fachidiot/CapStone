@@ -15,8 +15,6 @@ public class ThirdPersonShooterController : MonoBehaviour
     LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField]
     Transform targetTransform;
-    [SerializeField]
-    List<MultiAimConstraint> multiAimConstraintsList;
     [Range(1, 30)]
     public float normalSensitivity = 3f;
     [Range(1, 10)]

@@ -413,6 +413,7 @@ MonoBehaviour:
   bulletDrop: 10
   maxBounces: 0
   weaponName: pistol
+  ammoCount: 0
   maxAmmoCount: 7
   maxRecoilTime: 0
   recoilAmountVertical: 0
@@ -424,9 +425,8 @@ MonoBehaviour:
   loopSound: 0
   raycastOrigin: {fileID: 8502468881977904646}
   raycastDestination: {fileID: 0}
-  magazine: {fileID: 0}
+  magazine: {fileID: 381348445867878384}
   hitLayer: 3
-  ammoCountUI: {fileID: 0}
   hitUI: {fileID: 0}
   m_timePressed: 0
 --- !u!114 &5747341829010379894

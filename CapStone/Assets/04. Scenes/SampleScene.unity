@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.28345, g: 324.97046, b: 430.1162, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1367,6 +1367,17 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 64219269632923228, guid: 845b743c4072dd0458214bf22dcd8f8b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 845b743c4072dd0458214bf22dcd8f8b, type: 3}
+--- !u!114 &397929329 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5920948281317946016, guid: f6ca09fa868674dc082908436c639783, type: 3}
+  m_PrefabInstance: {fileID: 5920948280524959697}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa43a3db200f433ca14dc11c6a21c78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &407866432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3667,14 +3678,14 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 100000
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 2372.2385
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -3709,7 +3720,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
@@ -3745,7 +3756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 100000
+  m_Intensity: 2372.2385
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -4107,6 +4118,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.123730466, y: 0.20057693, z: 0.10715332}
   m_Center: {x: -0.00000042840838, y: -0.000000037252903, z: -0.0000003091991}
+--- !u!4 &1074112362 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2097896266466713617, guid: f6ca09fa868674dc082908436c639783, type: 3}
+  m_PrefabInstance: {fileID: 5920948280524959697}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1112287190 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1991375085070936, guid: 845b743c4072dd0458214bf22dcd8f8b, type: 3}
@@ -8851,6 +8867,10 @@ PrefabInstance:
     - target: {fileID: 2509789720473700230, guid: 5ca6282d9914d124dbc5f00a5ea78d83, type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2509789720473700230, guid: 5ca6282d9914d124dbc5f00a5ea78d83, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2509789720473700231, guid: 5ca6282d9914d124dbc5f00a5ea78d83, type: 3}
       propertyPath: m_Pivot.x
@@ -24342,9 +24362,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1536947394}
     - target: {fileID: 2090736523622591218, guid: f6ca09fa868674dc082908436c639783, type: 3}
+      propertyPath: leftHand
+      value: 
+      objectReference: {fileID: 1074112362}
+    - target: {fileID: 2090736523622591218, guid: f6ca09fa868674dc082908436c639783, type: 3}
       propertyPath: ammoCountUI
       value: 
       objectReference: {fileID: 289629158}
+    - target: {fileID: 2090736523622591218, guid: f6ca09fa868674dc082908436c639783, type: 3}
+      propertyPath: animationEvents
+      value: 
+      objectReference: {fileID: 397929329}
     - target: {fileID: 2092192547058039919, guid: f6ca09fa868674dc082908436c639783, type: 3}
       propertyPath: m_Name
       value: Player ver.2
