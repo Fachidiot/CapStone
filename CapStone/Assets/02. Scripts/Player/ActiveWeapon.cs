@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using System;
 
 public class ActiveWeapon : MonoBehaviour
 {
@@ -16,7 +18,12 @@ public class ActiveWeapon : MonoBehaviour
     public Transform target;
     public Transform[] weaponSlots;
 
+    public Transform leftHand;
+
     public Animator rigController;
+    public WeaponAnimationEvents animationEvents;
+
+    [HideInInspector]
     public bool isHasWeapon
     {
         get { return equipped_weapons[0] || equipped_weapons[1]; }
@@ -24,6 +31,7 @@ public class ActiveWeapon : MonoBehaviour
 
     RaycastWeapon[] equipped_weapons = new RaycastWeapon[2];
     int activeWeaponIndex;
+    GameObject magazineHand;
 
     void Start()
     {
@@ -32,11 +40,18 @@ public class ActiveWeapon : MonoBehaviour
         rigController.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         //rigController.updateMode = AnimatorUpdateMode.Normal;
 
+        animationEvents.WeaponAnimationEvent.AddListener(OnAnimationEvent);
+
         RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
         if (existingWeapon)
         {
             Equip(existingWeapon);
         }
+    }
+
+    RaycastWeapon GetCurrentWeapon()
+    {
+        return GetWeapon(activeWeaponIndex);
     }
 
     RaycastWeapon GetWeapon(int index)
@@ -54,10 +69,14 @@ public class ActiveWeapon : MonoBehaviour
     public void Fire()
     {
         var weapon = GetWeapon(activeWeaponIndex);
-        if (weapon)
-        {
-            weapon.Fire();
-        }
+        if (weapon.isReload)
+            return;
+
+        weapon.StartFiring();
+        if (weapon.isFiring)
+            weapon.UpdateFiring(Time.deltaTime);
+        ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
+        weapon.UpdateBullets(Time.deltaTime);
     }
 
     internal void SetUI(GameObject hitUI, GameObject ammoCountUI, Transform target)
@@ -96,7 +115,8 @@ public class ActiveWeapon : MonoBehaviour
         weapon.rigController = rigController;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.hitUI = hitUI;
-        weapon.ammoCountUI = ammoCountUI;
+        if (ammoCountUI)
+            ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
 
         equipped_weapons[weaponSlotIndex] = weapon;
 
@@ -152,6 +172,7 @@ public class ActiveWeapon : MonoBehaviour
         var weapon = GetWeapon(index);
         if (weapon)
         {
+            ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
             rigController.SetBool("holster_weapon", false);
             rigController.Play("equip_" + weapon.weaponName);
             do
@@ -159,5 +180,65 @@ public class ActiveWeapon : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             } while (rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
         }
+    }
+
+    public void OnAnimationEvent(string eventName)
+    {
+        Debug.Log(eventName);
+        switch (eventName)
+        {
+            case "detach_magazine":
+                DetachMagazine();
+                break;
+            case "drop_magazine":
+                DropMagazine();
+                break;
+            case "refill_magazine":
+                RefillMagazine();
+                break;
+            case "attatch_magazine":
+                AttatchMagazine();
+                break;
+            case "goodto_fire":
+                GoodToFire();
+                break;
+        }
+    }
+
+    private void DetachMagazine()
+    {
+        RaycastWeapon weapon = GetCurrentWeapon();
+        magazineHand = Instantiate(weapon.magazine, leftHand, true);
+        weapon.magazine.SetActive(false);
+    }
+
+    private void DropMagazine()
+    {
+        GameObject dropMagazine = Instantiate(magazineHand, magazineHand.transform.position, magazineHand.transform.rotation);
+        dropMagazine.AddComponent<Rigidbody>();
+        dropMagazine.AddComponent<BoxCollider>();
+        Destroy(dropMagazine, 10f);
+        magazineHand.SetActive(false);
+    }
+
+    private void RefillMagazine()
+    {
+        magazineHand.SetActive(true);
+    }
+
+    private void AttatchMagazine()
+    {
+        RaycastWeapon weapon = GetCurrentWeapon();
+        weapon.magazine.SetActive(true);
+        Destroy(magazineHand);
+        rigController.SetBool("holster_weapon", true);
+    }
+
+    private void GoodToFire()
+    {
+        RaycastWeapon weapon = GetCurrentWeapon();
+        weapon.ammoCount = weapon.maxAmmoCount;
+        weapon.isReload = false;
+        ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
     }
 }

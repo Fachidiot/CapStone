@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class RaycastWeapon : MonoBehaviour
 {
@@ -29,7 +28,7 @@ public class RaycastWeapon : MonoBehaviour
     public int maxBounces = 0;
     public string weaponName;
 
-    int ammoCount;
+    [HideInInspector] public int ammoCount;
     public int maxAmmoCount;
     [Header("Recoil System")]
     [Range(0, 10f)] public float maxRecoilTime;
@@ -48,9 +47,8 @@ public class RaycastWeapon : MonoBehaviour
     public Transform raycastDestination;
     public GameObject magazine;
 
-    [Header("UI Radio")]
+    [Header("UI")]
     public int hitLayer;
-    public GameObject ammoCountUI;
     public GameObject hitUI;
 
     Ray ray;
@@ -60,25 +58,18 @@ public class RaycastWeapon : MonoBehaviour
     float m_accumulatedTime;
     float m_maxLifeTime = 5.0f;
     Vector2 m_currentRecoilPos;
+    bool m_isReload = false;
+
     public float m_timePressed;
+    public bool isReload
+    {
+        get { return m_isReload; }
+        set { m_isReload = value; }
+    }
 
     void Awake()
     {
         ammoCount = maxAmmoCount;
-    }
-
-    void Start()
-    {
-        if (ammoCountUI)
-            ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
-    }
-
-    public void Fire()
-    {
-        StartFiring();
-        if (isFiring)
-            UpdateFiring(Time.deltaTime);
-        UpdateBullets(Time.deltaTime);
     }
 
     Vector3 GetPosition(RaycastBullet bullet)
@@ -100,7 +91,7 @@ public class RaycastWeapon : MonoBehaviour
         return bullet;
     }
 
-    void StartFiring()
+    public void StartFiring()
     {
         if (isFiring && m_accumulatedTime < 0.0f || ammoCount <= 0)
             return;
@@ -113,7 +104,7 @@ public class RaycastWeapon : MonoBehaviour
         //    m_accumulatedTime = lastm_accumulatedTime;
     }
 
-    void UpdateFiring(float deltaTime)
+    public void UpdateFiring(float deltaTime)
     {
         if (ammoCount <= 0)
             return;
@@ -127,11 +118,9 @@ public class RaycastWeapon : MonoBehaviour
             FireBullet();
             m_accumulatedTime -= fireInterval;
         }
-
-        ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
     }
 
-    void UpdateBullets(float deltaTime)
+    public void UpdateBullets(float deltaTime)
     {
         SimulateBullets(deltaTime);
         DestroyBullets();
@@ -142,9 +131,7 @@ public class RaycastWeapon : MonoBehaviour
         if (ammoCount != maxAmmoCount)
         {
             rigController.SetTrigger("reload_weapon");
-
-            ammoCount = maxAmmoCount;
-            ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
+            isReload = true;
         }
     }
 
@@ -193,7 +180,14 @@ public class RaycastWeapon : MonoBehaviour
             }
             Destroy(effect, 3f);
 
-            bullet.tracer.transform.position = hitInfo.point;
+            try
+            {
+                bullet.tracer.transform.position = hitInfo.point;
+            }
+            catch (System.Exception exception)
+            {
+                Debug.Log(exception);
+            }
             bullet.time = m_maxLifeTime;
 
             if (bullet.bounce > 0)
@@ -225,15 +219,6 @@ public class RaycastWeapon : MonoBehaviour
 
         bullets.Add(bullet);
         ammoCount--;
-    }
-
-    void OnReload(AnimationEvent animationEvent)
-    {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            ammoCount = maxAmmoCount;
-            ammoCountUI.GetComponent<TextMeshProUGUI>().text = ammoCount + " / " + maxAmmoCount;
-        }
     }
 
     public void StopFiring()

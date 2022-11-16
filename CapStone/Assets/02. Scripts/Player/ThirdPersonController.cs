@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
@@ -132,12 +132,13 @@ public class ThirdPersonController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        JumpAndGravity();
         Move();
+        CameraRotation();
     }
 
     private void Update()
     {
+        JumpAndGravity();
         GroundedCheck();
     }
 
