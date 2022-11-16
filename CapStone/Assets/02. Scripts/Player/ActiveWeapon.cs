@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class ActiveWeapon : MonoBehaviour
     public GameObject hitUI;
     public GameObject ammoCountUI;
 
-    public Transform Target;
+    public Transform target;
     public Transform[] weaponSlots;
 
     public Animator rigController;
@@ -59,6 +60,13 @@ public class ActiveWeapon : MonoBehaviour
         }
     }
 
+    internal void SetUI(GameObject hitUI, GameObject ammoCountUI, Transform target)
+    {
+        this.hitUI = hitUI;
+        this.ammoCountUI = ammoCountUI;
+        this.target = target;
+    }
+
     public void StopFire()
     {
         var weapon = GetWeapon(activeWeaponIndex);
@@ -84,7 +92,7 @@ public class ActiveWeapon : MonoBehaviour
             Destroy(weapon.gameObject);
 
         weapon = newWeapon;
-        weapon.raycastDestination = Target;
+        weapon.raycastDestination = target;
         weapon.rigController = rigController;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.hitUI = hitUI;

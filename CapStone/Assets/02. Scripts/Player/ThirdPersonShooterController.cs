@@ -4,19 +4,18 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using Cinemachine;
 
-[RequireComponent(typeof(ThirdPersonController))]
 public class ThirdPersonShooterController : MonoBehaviour
 {
     [SerializeField]
-    CinemachineVirtualCamera aimVirtualCamera;
+    protected GameObject aimVirtualCamera;
     [SerializeField]
-    GameObject CrossHair;
+    protected GameObject CrossHair;
     [SerializeField]
-    LayerMask aimColliderLayerMask = new LayerMask();
+    protected LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField]
-    Transform targetTransform;
-    [SerializeField]
-    List<MultiAimConstraint> multiAimConstraintsList;
+    protected Transform targetTransform;
+    //[SerializeField]
+    //List<MultiAimConstraint> multiAimConstraintsList;
     [Range(1, 30)]
     public float normalSensitivity = 3f;
     [Range(1, 10)]
@@ -80,7 +79,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Zoom(GetMousePosition());
+        var temp = GetMousePosition();
+        Zoom(temp);
         Fire();
     }
 

@@ -147,6 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff71e237e783748dd8d5fa5eb947bdbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: 0
+  customInputAction: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   CrouchSpeed: 1.2
   MoveSpeed: 2
   SprintSpeed: 5.335
@@ -180,6 +182,8 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  input: {fileID: -2105998663133237779}
+  playerInput: {fileID: -652409045944445854}
 --- !u!114 &8022571503658867407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
-  SyncPositionY: 1
+  SyncPositionY: 0
   SyncPositionZ: 1
   SyncRotAngleX: 0
   SyncRotAngleY: 0

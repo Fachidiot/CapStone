@@ -3,10 +3,11 @@ using Unity.Netcode;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(CustomInput))]
 public class NetworkTPController : NetworkBehaviour
 {
+    [Header("Network")]
+    [SerializeField] bool Owner;
+
     [Header("Player")]
     [Tooltip("웅크리기 속도 m/s")]
     public float CrouchSpeed = 1.2f;
@@ -34,6 +35,12 @@ public class NetworkTPController : NetworkBehaviour
     [Space(10)]
     [Tooltip("최대 점프 높이")]
     public float JumpHeight = 1.2f;
+
+    internal Transform GetCameraRoot()
+    {
+        return CinemachineCameraTarget.transform;
+    }
+
     [Tooltip("캐릭터 중력값")]
     public float Gravity = -9.18f;
     [Space(10)]
@@ -65,6 +72,9 @@ public class NetworkTPController : NetworkBehaviour
     float m_cinemachineTargetYaw;
     float m_cinemachineTargetPitch;
 
+    // Network
+    NetworkVariable<int> randomNumber = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
     // player
     protected Vector3 m_dashVelocity;
     protected float m_sensitivity = 3f;
@@ -89,7 +99,7 @@ public class NetworkTPController : NetworkBehaviour
     Animator animator;
     GameObject mainCamera;
     CustomInput input;
-    PlayerInput playerInput;
+    public PlayerInput playerInput;
     CharacterController controller;
 
     protected const float m_threshold = 0.01f;
@@ -111,6 +121,11 @@ public class NetworkTPController : NetworkBehaviour
         if (mainCamera == null)
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 
+        if (!IsOwner)
+        {
+            playerInput.enabled = false;
+        }
+
         m_hasAnimator = animator != null;
     }
 
@@ -120,7 +135,10 @@ public class NetworkTPController : NetworkBehaviour
             m_hasAnimator = TryGetComponent(out animator);
         controller = GetComponent<CharacterController>();
         input = GetComponent<CustomInput>();
-        playerInput = GetComponent<PlayerInput>();
+        //playerInput = GetComponent<PlayerInput>();
+
+        if (IsOwner)
+            playerInput.enabled = true;
 
         AssignAnimationIDs();
 
@@ -133,20 +151,23 @@ public class NetworkTPController : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        JumpAndGravity();
         if (!IsOwner)
             return;
+
+        JumpAndGravity();
         Move();
     }
 
     private void Update()
     {
+        Owner = IsOwner;
         GroundedCheck();
     }
 
     private void LateUpdate()
     {
-        CameraRotation();
+        if (IsOwner)
+            CameraRotation();
     }
 
     // Animator Parameter ID값 설정
@@ -279,15 +300,17 @@ public class NetworkTPController : NetworkBehaviour
             }
 
             // Jump
-            if (input.jump && m_jumpTimeoutDelta <= 0.0f)
-            {
-                // the square root of H * -2 * G = how much velocity needed to reach desired height
-                m_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
-                // update animator if using character
-                if (m_hasAnimator)
+            if (IsOwner) { 
+                if (input.jump && m_jumpTimeoutDelta <= 0.0f)
                 {
-                    animator.SetBool(m_animIDJump, true);
+                    // the square root of H * -2 * G = how much velocity needed to reach desired height
+                    m_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
+                    // update animator if using character
+                    if (m_hasAnimator)
+                    {
+                        animator.SetBool(m_animIDJump, true);
+                    }
                 }
             }
 
@@ -317,7 +340,8 @@ public class NetworkTPController : NetworkBehaviour
             }
 
             // if we are not grounded, do not jump
-            input.jump = false;
+            if (IsOwner)
+                input.jump = false;
         }
 
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
