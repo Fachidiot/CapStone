@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class NetworkCameraController : MonoBehaviour
 {
@@ -21,11 +22,11 @@ public class NetworkCameraController : MonoBehaviour
     {
         if (!player)
         {
-            // 플레이어 찾고 UI필요한 컴포넌트에 다 적용 해줘야함
             GameObject[] playerList = GameObject.FindGameObjectsWithTag("Player");
             foreach (var player in playerList)
             {
                 NetworkTPController networkTPController = player.GetComponent<NetworkTPController>();
+                // Is Player
                 if (networkTPController.IsOwner)
                 {
                     this.player = player;
@@ -38,6 +39,12 @@ public class NetworkCameraController : MonoBehaviour
                     followCamera.Follow = networkTPController.GetCameraRoot();
                     aimCamera.Follow = networkTPController.GetCameraRoot();
                     followCamera.gameObject.SetActive(true);
+                } else {
+                    GameObject client = networkTPController.gameObject;
+
+                    Destroy(client.GetComponentInChildren<Cinemachine.CinemachineFreeLook>());
+                    Destroy(client.GetComponent<CustomInput>());
+                    Destroy(client.GetComponent<PlayerInput>());
                 }
             }
         }

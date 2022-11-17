@@ -124,7 +124,7 @@
                 },
                 {
                     "name": "Inventory",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "a9097040-a3b6-4df9-a6b5-58e03a301ad6",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -153,6 +153,15 @@
                     "name": "Alpha2",
                     "type": "Button",
                     "id": "b66aa655-ad96-4655-a9fd-4ffbe633fc3a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "285584e5-78dc-495e-b57c-62a22fa647a4",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -476,6 +485,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Alpha2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "00047cc3-3a54-4120-aeb3-f71464638dbe",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

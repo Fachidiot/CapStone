@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 public class ActiveWeapon : MonoBehaviour
 {
     public enum WeaponSlot
     {
+        None = -1,
         Primary = 0,
         Secondary = 1
     }
     public GameObject hitUI;
     public GameObject ammoCountUI;
+    public GameObject maxAmmoCountUI;
 
     public Transform target;
     public Transform[] weaponSlots;
@@ -23,6 +24,11 @@ public class ActiveWeapon : MonoBehaviour
     public Animator rigController;
     public WeaponAnimationEvents animationEvents;
 
+    public Cinemachine.CinemachineFreeLook playerCamera;
+    public WeaponSlot currentWeapon = WeaponSlot.None;
+
+    public bool isNeedReload = false;
+    
     [HideInInspector]
     public bool isHasWeapon
     {
@@ -35,6 +41,7 @@ public class ActiveWeapon : MonoBehaviour
 
     void Start()
     {
+        currentWeapon = WeaponSlot.None;
         rigController.updateMode = AnimatorUpdateMode.AnimatePhysics;
         rigController.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
         rigController.cullingMode = AnimatorCullingMode.AlwaysAnimate;
@@ -51,6 +58,7 @@ public class ActiveWeapon : MonoBehaviour
 
     RaycastWeapon GetCurrentWeapon()
     {
+        Debug.Log(activeWeaponIndex);
         return GetWeapon(activeWeaponIndex);
     }
 
@@ -75,8 +83,22 @@ public class ActiveWeapon : MonoBehaviour
         weapon.StartFiring();
         if (weapon.isFiring)
             weapon.UpdateFiring(Time.deltaTime);
-        ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
+        UpdateUI();
         weapon.UpdateBullets(Time.deltaTime);
+    }
+
+    void UpdateUI() {
+        var weapon = GetCurrentWeapon();
+        if (weapon == null)
+            return;
+
+        if (weapon.ammoCount < weapon.maxAmmoCount / 5)
+            isNeedReload = true;
+        else
+            isNeedReload = false;
+            
+        ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount.ToString();
+        maxAmmoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.maxAmmoCount.ToString();
     }
 
     internal void SetUI(GameObject hitUI, GameObject ammoCountUI, Transform target)
@@ -106,32 +128,38 @@ public class ActiveWeapon : MonoBehaviour
     public void Equip(RaycastWeapon newWeapon)
     {
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
+        currentWeapon = newWeapon.weaponSlot;
         var weapon = GetWeapon(weaponSlotIndex);
         if (weapon)
             Destroy(weapon.gameObject);
 
         weapon = newWeapon;
         weapon.raycastDestination = target;
+        weapon.recoil.playerCamera = playerCamera;
         weapon.rigController = rigController;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.hitUI = hitUI;
-        if (ammoCountUI)
-            ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
 
         equipped_weapons[weaponSlotIndex] = weapon;
 
         SetActiveWeapon(newWeapon.weaponSlot);
+        currentWeapon = newWeapon.weaponSlot;
+        UpdateUI();
     }
 
     public void SwitchWeapon(int weaponSlot)
     {
+        if (!isHasWeapon)
+            return;
         switch (weaponSlot)
         {
             case 0:
-                SetActiveWeapon(WeaponSlot.Primary);
+                currentWeapon = WeaponSlot.Primary;
+                SetActiveWeapon(currentWeapon);
                 return;
             case 1:
-                SetActiveWeapon(WeaponSlot.Secondary);
+                currentWeapon = WeaponSlot.Secondary;
+                SetActiveWeapon(currentWeapon);
                 return;
         }
     }
@@ -140,6 +168,7 @@ public class ActiveWeapon : MonoBehaviour
     {
         int holsterIndex = activeWeaponIndex;
         int activateIndex = (int)weaponSlot;
+        activeWeaponIndex = (int)weaponSlot;
 
         if (holsterIndex == activateIndex)
             holsterIndex = -1;
@@ -172,7 +201,7 @@ public class ActiveWeapon : MonoBehaviour
         var weapon = GetWeapon(index);
         if (weapon)
         {
-            ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
+            UpdateUI();
             rigController.SetBool("holster_weapon", false);
             rigController.Play("equip_" + weapon.weaponName);
             do
@@ -239,6 +268,6 @@ public class ActiveWeapon : MonoBehaviour
         RaycastWeapon weapon = GetCurrentWeapon();
         weapon.ammoCount = weapon.maxAmmoCount;
         weapon.isReload = false;
-        ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount + " / " + weapon.maxAmmoCount;
+        UpdateUI();
     }
 }

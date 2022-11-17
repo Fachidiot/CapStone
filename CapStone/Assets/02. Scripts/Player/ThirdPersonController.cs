@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(CustomInput))]
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("Player")]
@@ -132,14 +130,10 @@ public class ThirdPersonController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        GroundedCheck();
+        JumpAndGravity();
         Move();
         CameraRotation();
-    }
-
-    private void Update()
-    {
-        JumpAndGravity();
-        GroundedCheck();
     }
 
     private void LateUpdate()

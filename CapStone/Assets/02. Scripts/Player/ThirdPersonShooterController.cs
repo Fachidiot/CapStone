@@ -13,20 +13,25 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField]
     protected LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField]
-    Transform targetTransform;
+    protected Transform targetTransform;
     [Range(1, 30)]
     public float normalSensitivity = 3f;
     [Range(1, 10)]
     public float aimSensitivity = 2f;
     public float aimDuration = 0.3f;
     [SerializeField]
-    ActiveWeapon WeaponManager;
-    [HideInInspector] public float recoilCameraXRotation;
-    [HideInInspector] public float recoilCameraYRotation;
-    float m_currentCameraXRotation;
-    float m_currentCameraYRotation;
+    protected ActiveWeapon WeaponManager;
 
-    bool aimed = false;
+    [SerializeField]
+    float normalFOV = 40;
+    [SerializeField]
+    float aimedFOV = 40;
+    [SerializeField]
+    Vector3 normalOffset = new Vector3(0, 0, 0);
+    [SerializeField]
+    Vector3 aimedOffset = new Vector3(0.5f, 0, 1);
+
+    protected bool aimed = false;
 
     //Animation ID
     int m_animIDZoom;
@@ -35,11 +40,11 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     ThirdPersonController thirdPersonController;
     RigBuilder rigController;
-    CustomInput input;
-    Animator animator;
+    protected CustomInput input;
+    protected Animator animator;
     Vector2 screenCenterPoint;
 
-    void Awake()
+    protected void Awake()
     {
         input = GetComponent<CustomInput>();
         animator = GetComponent<Animator>();
@@ -91,20 +96,16 @@ public class ThirdPersonShooterController : MonoBehaviour
         animator.SetFloat(m_animIDVertical, input.move.y, 0.1f, Time.deltaTime);
     }
 
-    void Zoom(Vector3 mousePosition)
+    protected virtual void Zoom(Vector3 mousePosition)
     {
-        // Do Recoil
-        // m_currentCameraYRotation = Mathf.SmoothDamp(m_currentCameraYRotation, recoilCameraYRotation, ref rotationYVelocity, yRotationSpeed);
-        // m_currentCameraXRotation = Mathf.SmoothDamp(m_currentCameraXRotation, recoilCameraXRotation, ref rotationXVelocity, xRotationSpeed);
-
-        // transform.rotation = Quaternion.Euler(0, m_currentCameraYRotation, 0);
-        // camera.localRotation = Quaternion.Euler(m_currentCameraXRotation, 0, zRotation);
-
         // if Player do zoom
         if (input.mouseR)
         {
             CrossHair.SetActive(true);
-            aimVirtualCamera.gameObject.SetActive(true);
+            // aimVirtualCamera.gameObject.SetActive(true);
+            aimVirtualCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_Lens.FieldOfView = aimedFOV;
+            aimVirtualCamera.GetComponent<CinemachineCameraOffset>().m_Offset = aimedOffset;
+
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
             aimed = true;
@@ -118,7 +119,10 @@ public class ThirdPersonShooterController : MonoBehaviour
         else
         {
             CrossHair.SetActive(false);
-            aimVirtualCamera.gameObject.SetActive(false);
+            // aimVirtualCamera.gameObject.SetActive(false);
+            aimVirtualCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_Lens.FieldOfView = normalFOV;
+            aimVirtualCamera.GetComponent<CinemachineCameraOffset>().m_Offset = normalOffset;
+
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
             aimed = false;
@@ -144,11 +148,17 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     void Reload()
     {
-        if (input.reload)
+        if (!WeaponManager.isHasWeapon)
+            return;
+        if (input.mouseR)
         {
-            WeaponManager.Reload();
-            input.reload = false;
+            if (input.reload)
+            {
+                WeaponManager.Reload();
+            }
         }
+        
+        input.reload = false;
     }
 
     void SwitchWeapon()
@@ -163,12 +173,6 @@ public class ThirdPersonShooterController : MonoBehaviour
             WeaponManager.SwitchWeapon(1);
             input.alpha2 = false;
         }
-    }
-
-    void Recoiling()
-    {
-        if (!WeaponManager.isHasWeapon)
-            return;
     }
 
     void SkillSystem()
@@ -211,12 +215,12 @@ public class ThirdPersonShooterController : MonoBehaviour
             // 궁극기 생성
             input.ultimate = false;
         }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Weapon") {
 
-        if (input.reload)
-        {
-            // 장전 스크립트
-            // 해당 총기 장전
-            input.reload = false;
         }
     }
 

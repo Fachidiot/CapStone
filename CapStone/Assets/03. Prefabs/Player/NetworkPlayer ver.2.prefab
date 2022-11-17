@@ -4065,7 +4065,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9
   targetTransform: {fileID: 0}
-  multiAimConstraintsList: []
   normalSensitivity: 3
   aimSensitivity: 2
   aimDuration: 0.3
@@ -4086,11 +4085,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitUI: {fileID: 0}
   ammoCountUI: {fileID: 0}
-  Target: {fileID: 0}
+  target: {fileID: 0}
   weaponSlots:
   - {fileID: 4485178091075946490}
   - {fileID: 4485178090089701627}
+  leftHand: {fileID: 8145000894429691117}
   rigController: {fileID: 4485178090197085789}
+  animationEvents: {fileID: 4485178090197085788}
 --- !u!114 &8148748302600386057
 MonoBehaviour:
   m_ObjectHideFlags: 0

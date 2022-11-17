@@ -39,12 +39,13 @@ public class RaycastWeapon : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject hitEffect;
     public TrailRenderer tracerEffect;
-    public AudioSource fireSound;
-    public bool loopSound;
+    public AudioClip[] audioClips;
+    public AudioSource audioSource;
 
     [Header("Raycast")]
     public Transform raycastOrigin;
     public Transform raycastDestination;
+    public WeaponRecoil recoil;
     public GameObject magazine;
 
     [Header("UI")]
@@ -54,7 +55,6 @@ public class RaycastWeapon : MonoBehaviour
     Ray ray;
     RaycastHit hitInfo;
     List<RaycastBullet> bullets = new List<RaycastBullet>();
-    ThirdPersonShooterController m_tpsController;
     float m_accumulatedTime;
     float m_maxLifeTime = 5.0f;
     Vector2 m_currentRecoilPos;
@@ -70,6 +70,7 @@ public class RaycastWeapon : MonoBehaviour
     void Awake()
     {
         ammoCount = maxAmmoCount;
+        recoil = GetComponent<WeaponRecoil>();
     }
 
     Vector3 GetPosition(RaycastBullet bullet)
@@ -93,11 +94,9 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StartFiring()
     {
-        if (isFiring && m_accumulatedTime < 0.0f || ammoCount <= 0)
+        if (isFiring && m_accumulatedTime < 0.0f)
             return;
-
-        if (loopSound)
-            fireSound.Play();
+        recoil.Reset();
         isFiring = true;
         m_accumulatedTime = 0.0f;
         //if (lastm_accumulatedTime < 0)
@@ -106,16 +105,19 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(float deltaTime)
     {
-        if (ammoCount <= 0)
-            return;
         m_accumulatedTime += deltaTime;
         m_timePressed += deltaTime;
         float fireInterval = 1.0f / fireRate;
         while (m_accumulatedTime >= 0.0f)
         {
-            if (!loopSound)
-                fireSound.Play();
-            FireBullet();
+            if (ammoCount <= 0)
+                audioSource.PlayOneShot(audioClips[1]);
+            else
+            {
+                audioSource.PlayOneShot(audioClips[0]);
+                FireBullet();
+                RecoilMath();
+            }
             m_accumulatedTime -= fireInterval;
         }
     }
@@ -131,6 +133,7 @@ public class RaycastWeapon : MonoBehaviour
         if (ammoCount != maxAmmoCount)
         {
             rigController.SetTrigger("reload_weapon");
+            audioSource.PlayOneShot(audioClips[2]);
             isReload = true;
         }
     }
@@ -218,6 +221,7 @@ public class RaycastWeapon : MonoBehaviour
         RecoilMath();
 
         bullets.Add(bullet);
+        recoil.GenerateRecoil();
         ammoCount--;
     }
 
@@ -233,8 +237,10 @@ public class RaycastWeapon : MonoBehaviour
         isFiring = false;
         m_timePressed = 0;
         StopAllCoroutines();
-
-        if (loopSound)
-            fireSound.Stop();
+    }
+    
+    private void OnCollisionEnter(Collision other)
+    {
+        
     }
 }
