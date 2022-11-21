@@ -14,6 +14,7 @@ public class NetworkCameraController : MonoBehaviour
     public GameObject crossHairUI;
     public GameObject hitUI;
     public GameObject ammoCountUI;
+    public GameObject maxAmmoCountUI;
     public Transform target;
 
     GameObject player;
@@ -35,11 +36,13 @@ public class NetworkCameraController : MonoBehaviour
                     networkTPSController.SetAimLayer(aimColliderLayerMask);
                     networkTPSController.SetUIAll(crossHairUI, hitUI, target);
                     ActiveWeapon activeWeapon = player.GetComponent<ActiveWeapon>();
-                    activeWeapon.SetUI(hitUI, ammoCountUI, target);
+                    activeWeapon.SetUI(hitUI, ammoCountUI, maxAmmoCountUI, target);
                     followCamera.Follow = networkTPController.GetCameraRoot();
                     aimCamera.Follow = networkTPController.GetCameraRoot();
                     followCamera.gameObject.SetActive(true);
-                } else {
+                }
+                else
+                {
                     GameObject client = networkTPController.gameObject;
 
                     Destroy(client.GetComponentInChildren<Cinemachine.CinemachineFreeLook>());

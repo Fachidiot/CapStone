@@ -28,7 +28,7 @@ public class ActiveWeapon : MonoBehaviour
     public WeaponSlot currentWeapon = WeaponSlot.None;
 
     public bool isNeedReload = false;
-    
+
     [HideInInspector]
     public bool isHasWeapon
     {
@@ -87,7 +87,8 @@ public class ActiveWeapon : MonoBehaviour
         weapon.UpdateBullets(Time.deltaTime);
     }
 
-    void UpdateUI() {
+    void UpdateUI()
+    {
         var weapon = GetCurrentWeapon();
         if (weapon == null)
             return;
@@ -96,15 +97,16 @@ public class ActiveWeapon : MonoBehaviour
             isNeedReload = true;
         else
             isNeedReload = false;
-            
+
         ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount.ToString();
         maxAmmoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.maxAmmoCount.ToString();
     }
 
-    internal void SetUI(GameObject hitUI, GameObject ammoCountUI, Transform target)
+    internal void SetUI(GameObject hitUI, GameObject ammoCountUI, GameObject maxAmmoCountUI, Transform target)
     {
         this.hitUI = hitUI;
         this.ammoCountUI = ammoCountUI;
+        this.maxAmmoCountUI = maxAmmoCountUI;
         this.target = target;
     }
 

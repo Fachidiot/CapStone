@@ -13,8 +13,8 @@ public class MainUIManager : MonoBehaviour
     public RawImage weaponImg;
 
     public Texture2D[] weaponImages;
-    
-    [SerializeField]ActiveWeapon.WeaponSlot currentWeapon = ActiveWeapon.WeaponSlot.None;
+
+    [SerializeField] ActiveWeapon.WeaponSlot currentWeapon = ActiveWeapon.WeaponSlot.None;
     ActiveWeapon weaponManager;
     CustomInput playerInput;
     Cinemachine.CinemachineFreeLook playerCamera;
@@ -25,19 +25,32 @@ public class MainUIManager : MonoBehaviour
         weaponManager = FindObjectOfType<ActiveWeapon>();
         playerCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
     }
-    
-    void Update() {
-        OpenMenu();
-        UpdateWeaponUI();
+
+    void Update()
+    {
+        if (playerInput)
+        {
+            OpenMenu();
+            UpdateWeaponUI();
+        }
+        else
+        {
+            weaponManager = FindObjectOfType<ActiveWeapon>();
+            playerInput = FindObjectOfType<CustomInput>();
+            playerCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
+        }
     }
 
-    void UpdateWeaponUI() {
+    void UpdateWeaponUI()
+    {
         currentWeapon = weaponManager.currentWeapon;
-        if (currentWeapon != ActiveWeapon.WeaponSlot.None) {
+        if (currentWeapon != ActiveWeapon.WeaponSlot.None)
+        {
             weaponImg.gameObject.SetActive(true);
 
             reload.SetActive(weaponManager.isNeedReload);
-            switch (currentWeapon) {
+            switch (currentWeapon)
+            {
                 case ActiveWeapon.WeaponSlot.Primary:
                     weaponImg.texture = weaponImages[0];
                     break;
@@ -45,14 +58,18 @@ public class MainUIManager : MonoBehaviour
                     weaponImg.texture = weaponImages[1];
                     break;
             }
-        } else
+        }
+        else
             weaponImg.gameObject.SetActive(false);
     }
 
     bool currentState = false;
-    void OpenMenu() {
-        if (playerInput.escape) {
-            if (Option.activeSelf) {
+    void OpenMenu()
+    {
+        if (playerInput.escape)
+        {
+            if (Option.activeSelf)
+            {
                 Option.SetActive(false);
                 Mainmenu.SetActive(true);
                 playerInput.escape = false;
@@ -70,7 +87,8 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
-    public void CloseMenu() {
+    public void CloseMenu()
+    {
         Interface.SetActive(currentState);
         Mainmenu.SetActive(!currentState);
         Cursor.lockState = currentState ? CursorLockMode.Locked : CursorLockMode.None;
@@ -81,7 +99,8 @@ public class MainUIManager : MonoBehaviour
         currentState = !currentState;
     }
 
-    public void ExitGame() {
+    public void ExitGame()
+    {
         Application.Quit();
     }
 }
