@@ -2,17 +2,13 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 8
+  serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
   m_Name: Sun
   m_Shader: {fileID: 4800000, guid: 511e821c788ce374e9310abe9316cdd5, type: 3}
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ALPHATEST_ON
-  - _EMISSION
+  m_ShaderKeywords: _ALPHATEST_ON _EMISSION
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -78,7 +74,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -91,12 +86,10 @@ Material:
     - _Metallic: 0
     - _Mode: 1
     - _OcclusionStrength: 1
-    - _Opacity: 0
     - _Parallax: 0.02
     - _Planet_Light: 1.762
     - _Rim_Intensity: 2.04
     - _SmoothnessTextureChannel: 0
-    - _Soft_Blend_Switch: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
@@ -108,4 +101,3 @@ Material:
     - _EmissionColor: {r: 0.42322502, g: 0, b: 0.5735294, a: 1}
     - _Glow_Tint: {r: 1, g: 0.64137924, b: 0, a: 0}
     - _Planet_Tint: {r: 1, g: 0.821501, b: 0.5955882, a: 0}
-  m_BuildTextureStacks: []
