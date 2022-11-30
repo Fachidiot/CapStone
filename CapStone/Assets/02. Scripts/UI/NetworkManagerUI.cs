@@ -44,7 +44,7 @@ public class NetworkManagerUI : MonoBehaviour
         Debug.Log(joinData.AllocationID);
 
         NetworkManager.Singleton.GetComponent<UnityTransport>()
-            .SetRelayServerData(joinData.IPv4Address, joinData.Port, joinData.AllocationIDByte, joinData.Key, joinData.HostConnectionData);
+            .SetRelayServerData(joinData.IPv4Address, joinData.Port, joinData.AllocationIDByte, joinData.Key, joinData.ConnectionData, joinData.HostConnectionData);
 
         NetworkManager.Singleton.StartClient();
     }
