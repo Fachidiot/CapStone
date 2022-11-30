@@ -485,7 +485,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4485178090152746860}
-  m_LocalRotation: {x: 0.124220625, y: 0.000000017598554, z: -0.0000000022031676, w: 0.9922547}
+  m_LocalRotation: {x: 0.124220625, y: -0.000000017598564, z: 0.0000000022031688, w: 0.9922547}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -531,13 +531,6 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
-    Iso: 200
-    ShutterSpeed: 0.005
-    Aperture: 16
-    BladeCount: 5
-    Curvature: {x: 2, y: 11}
-    BarrelClipping: 0.25
-    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -748,13 +741,6 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
-    Iso: 200
-    ShutterSpeed: 0.005
-    Aperture: 16
-    BladeCount: 5
-    Curvature: {x: 2, y: 11}
-    BarrelClipping: 0.25
-    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -990,7 +976,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4485178090677065940}
-  m_LocalRotation: {x: 0.14220114, y: 0.000000017031528, z: -0.0000000024467675, w: 0.9898378}
+  m_LocalRotation: {x: 0.14220114, y: -0.000000017031526, z: 0.0000000024467672, w: 0.9898378}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1036,13 +1022,6 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
-    Iso: 200
-    ShutterSpeed: 0.005
-    Aperture: 16
-    BladeCount: 5
-    Curvature: {x: 2, y: 11}
-    BarrelClipping: 0.25
-    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1581,7 +1560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4485178091157766403
 Transform:
   m_ObjectHideFlags: 0
@@ -1631,13 +1610,6 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
-    Iso: 200
-    ShutterSpeed: 0.005
-    Aperture: 16
-    BladeCount: 5
-    Curvature: {x: 2, y: 11}
-    BarrelClipping: 0.25
-    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3997,9 +3969,11 @@ MonoBehaviour:
   holster: 0
   alpha1: 0
   alpha2: 0
+  escape: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+  isFocus: 1
 --- !u!114 &6074506026221539991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4059,7 +4033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd7c2c4da368d6448c1f22684130746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimVirtualCamera: {fileID: 0}
+  aimVirtualCamera: {fileID: 4485178091157766401}
   CrossHair: {fileID: 0}
   aimColliderLayerMask:
     serializedVersion: 2
@@ -4069,8 +4043,10 @@ MonoBehaviour:
   aimSensitivity: 2
   aimDuration: 0.3
   WeaponManager: {fileID: 8148748302600386062}
-  recoilCameraXRotation: 0
-  recoilCameraYRotation: 0
+  normalFOV: 40
+  aimedFOV: 40
+  normalOffset: {x: 0, y: 0, z: 0}
+  aimedOffset: {x: 0.5, y: 0, z: 1}
 --- !u!114 &8148748302600386062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4085,6 +4061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitUI: {fileID: 0}
   ammoCountUI: {fileID: 0}
+  maxAmmoCountUI: {fileID: 0}
   target: {fileID: 0}
   weaponSlots:
   - {fileID: 4485178091075946490}
@@ -4092,6 +4069,9 @@ MonoBehaviour:
   leftHand: {fileID: 8145000894429691117}
   rigController: {fileID: 4485178090197085789}
   animationEvents: {fileID: 4485178090197085788}
+  playerCamera: {fileID: 0}
+  currentWeapon: -1
+  isNeedReload: 0
 --- !u!114 &8148748302600386057
 MonoBehaviour:
   m_ObjectHideFlags: 0

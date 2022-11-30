@@ -133,7 +133,7 @@ public class ThirdPersonController : MonoBehaviour
         GroundedCheck();
         JumpAndGravity();
         Move();
-        CameraRotation();
+        // CameraRotation();
     }
 
     private void LateUpdate()
