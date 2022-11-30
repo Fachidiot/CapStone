@@ -59,9 +59,6 @@ public class RelayManager : MonoBehaviour
             JoinCode = await Unity.Services.Relay.RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId)
         };
 
-        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(hostData.IPv4Address, hostData.Port, hostData.AllocationIDByte, hostData.Key, hostData.ConnectionData);
-        // NetworkManager.Singleton.StartHost();
-
         return hostData;
     }
 
@@ -90,9 +87,6 @@ public class RelayManager : MonoBehaviour
             HostConnectionData = allocation.HostConnectionData,
             Key = allocation.Key
         };
-
-        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(joinData.IPv4Address, joinData.Port, joinData.AllocationIDByte, joinData.Key, joinData.ConnectionData);
-        // NetworkManager.Singleton.StartClient();
 
         return joinData;
     }

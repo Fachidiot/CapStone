@@ -43,7 +43,8 @@ public class NetworkManagerUI : MonoBehaviour
         var joinData = await RelayManager.JoinRelay(joinCodeInputField.text, "production");
         Debug.Log(joinData.AllocationID);
 
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(joinData.IPv4Address, joinData.Port, joinData.AllocationIDByte, joinData.Key, joinData.ConnectionData);
+        NetworkManager.Singleton.GetComponent<UnityTransport>()
+            .SetRelayServerData(joinData.IPv4Address, joinData.Port, joinData.AllocationIDByte, joinData.Key, joinData.HostConnectionData);
 
         NetworkManager.Singleton.StartClient();
     }
