@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 693850645}
@@ -332,6 +332,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1417090140843828055, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
+      propertyPath: m_Name
+      value: NetworkManagerUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6008254188936328799, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 7294c0e86ebaf7140b8dfe7748720214, type: 2}
+    - target: {fileID: 6008254188936328799, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 412990147725122296, guid: 7294c0e86ebaf7140b8dfe7748720214, type: 2}
+    - target: {fileID: 7545074124980086173, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 7294c0e86ebaf7140b8dfe7748720214, type: 2}
+    - target: {fileID: 7545074124980086173, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 412990147725122296, guid: 7294c0e86ebaf7140b8dfe7748720214, type: 2}
     - target: {fileID: 8941778426699086850, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -420,6 +440,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9092255734667838445, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
+      propertyPath: m_GlobalFontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 7294c0e86ebaf7140b8dfe7748720214, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 130c35f08f537e342aaa4ac62e8cbe3b, type: 3}
 --- !u!1 &831688591 stripped
