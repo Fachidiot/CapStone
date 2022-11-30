@@ -80,7 +80,6 @@ public class MainUIManager : MonoBehaviour
             Cursor.lockState = currentState ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !currentState;
             playerInput.isFocus = currentState;
-            playerCamera.enabled = currentState;
 
             currentState = !currentState;
             playerInput.escape = false;

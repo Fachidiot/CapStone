@@ -10,7 +10,7 @@ public class NetworkTPSController : ThirdPersonShooterController
 {
     NetworkTPController thirdPersonController;
 
-    void Awake()
+    new void Awake()
     {
         base.Awake();
         animator = GetComponent<Animator>();
