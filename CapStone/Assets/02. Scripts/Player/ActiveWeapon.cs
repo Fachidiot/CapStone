@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ActiveWeapon : MonoBehaviour
@@ -12,11 +11,7 @@ public class ActiveWeapon : MonoBehaviour
         Primary = 0,
         Secondary = 1
     }
-    public GameObject hitUI;
-    public GameObject ammoCountUI;
-    public GameObject maxAmmoCountUI;
 
-    public Transform target;
     public Transform[] weaponSlots;
 
     public Transform leftHand;
@@ -39,8 +34,20 @@ public class ActiveWeapon : MonoBehaviour
     int activeWeaponIndex;
     GameObject magazineHand;
 
+    // UIs
+    Transform target;
+    Image hitUI;
+    TMP_Text ammoCountUI;
+    TMP_Text maxAmmoCountUI;
+
     void Start()
     {
+        target = GetComponent<ThirdPersonShooterController>().targetTransform;
+        var playerUIManager = FindObjectOfType<PlayerUIManager>();
+        hitUI = playerUIManager.UI_Hit;
+        ammoCountUI = playerUIManager.UI_AmmoCount;
+        maxAmmoCountUI = playerUIManager.UI_MaxAmmoCount;
+
         currentWeapon = WeaponSlot.None;
         rigController.updateMode = AnimatorUpdateMode.AnimatePhysics;
         rigController.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
@@ -100,14 +107,6 @@ public class ActiveWeapon : MonoBehaviour
 
         ammoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.ammoCount.ToString();
         maxAmmoCountUI.GetComponent<TextMeshProUGUI>().text = weapon.maxAmmoCount.ToString();
-    }
-
-    internal void SetUI(GameObject hitUI, GameObject ammoCountUI, GameObject maxAmmoCountUI, Transform target)
-    {
-        this.hitUI = hitUI;
-        this.ammoCountUI = ammoCountUI;
-        this.maxAmmoCountUI = maxAmmoCountUI;
-        this.target = target;
     }
 
     public void StopFire()

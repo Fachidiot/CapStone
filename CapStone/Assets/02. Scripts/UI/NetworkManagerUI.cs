@@ -11,6 +11,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] Button serverButton;
     [SerializeField] Button hostButton;
     [SerializeField] Button clientButton;
+    [SerializeField] TMP_Text playersInGameText;
     [SerializeField] TMP_InputField joinCodeInputField;
 
     private void Awake()
@@ -18,6 +19,11 @@ public class NetworkManagerUI : MonoBehaviour
         serverButton.onClick.AddListener(() => ServerButtonClick());
         hostButton.onClick.AddListener(() => HostButtonClick());
         clientButton.onClick.AddListener(() => ClientButtonClick());
+    }
+
+    void Update()
+    {
+        playersInGameText.text = $"Players in game: {PlayersManager.Instance.PlayersInGame}";
     }
 
     public void ServerButtonClick()

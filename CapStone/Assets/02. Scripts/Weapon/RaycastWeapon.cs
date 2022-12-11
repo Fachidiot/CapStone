@@ -50,7 +50,7 @@ public class RaycastWeapon : MonoBehaviour
 
     [Header("UI")]
     public int hitLayer;
-    public GameObject hitUI;
+    [HideInInspector] public Image hitUI;
 
     Ray ray;
     RaycastHit hitInfo;
@@ -178,7 +178,7 @@ public class RaycastWeapon : MonoBehaviour
             if (hitInfo.rigidbody != null)
             {
                 if (hitInfo.rigidbody.gameObject.layer == hitLayer)
-                    hitUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    hitUI.color = new Color(1, 1, 1, 1);
                 hitInfo.rigidbody.AddForce(-hitInfo.normal * bulletPower);
             }
             Destroy(effect, 3f);

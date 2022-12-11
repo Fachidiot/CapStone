@@ -1,19 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Animations.Rigging;
-using Cinemachine;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject aimVirtualCamera;
+    GameObject aimVirtualCamera;
     [SerializeField]
-    protected GameObject CrossHair;
-    [SerializeField]
-    protected LayerMask aimColliderLayerMask = new LayerMask();
-    [SerializeField]
-    protected Transform targetTransform;
+    LayerMask aimColliderLayerMask = new LayerMask();
+    [HideInInspector] public Transform targetTransform;
     [Range(1, 30)]
     public float normalSensitivity = 3f;
     [Range(1, 10)]
@@ -32,6 +27,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     Vector3 aimedOffset = new Vector3(0.5f, 0, 1);
 
     protected bool aimed = false;
+    Image CrossHair;
 
     //Animation ID
     int m_animIDZoom;
@@ -44,8 +40,10 @@ public class ThirdPersonShooterController : MonoBehaviour
     protected Animator animator;
     Vector2 screenCenterPoint;
 
-    protected void Awake()
+    void Awake()
     {
+        if (targetTransform == null)
+            targetTransform = new GameObject().GetComponent<Transform>();
         input = GetComponent<CustomInput>();
         animator = GetComponent<Animator>();
         rigController = GetComponent<RigBuilder>();
@@ -64,6 +62,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     void Start()
     {
+        var playerUIManager = FindObjectOfType<PlayerUIManager>();
+        CrossHair = playerUIManager.UI_CrossHair;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         AssignAnimationIDs();
@@ -101,7 +101,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         // if Player do zoom
         if (input.mouseR)
         {
-            CrossHair.SetActive(true);
+            CrossHair.gameObject.SetActive(true);
             // aimVirtualCamera.gameObject.SetActive(true);
             aimVirtualCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_Lens.FieldOfView = aimedFOV;
             aimVirtualCamera.GetComponent<CinemachineCameraOffset>().m_Offset = aimedOffset;
@@ -118,7 +118,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
         else
         {
-            CrossHair.SetActive(false);
+            CrossHair.gameObject.SetActive(false);
             // aimVirtualCamera.gameObject.SetActive(false);
             aimVirtualCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_Lens.FieldOfView = normalFOV;
             aimVirtualCamera.GetComponent<CinemachineCameraOffset>().m_Offset = normalOffset;

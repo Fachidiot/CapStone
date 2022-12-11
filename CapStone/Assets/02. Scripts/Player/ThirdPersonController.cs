@@ -1,3 +1,5 @@
+using Unity.Netcode;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -133,13 +135,12 @@ public class ThirdPersonController : MonoBehaviour
         GroundedCheck();
         JumpAndGravity();
         Move();
-        // CameraRotation();
-    }
-
-    private void LateUpdate()
-    {
         CameraRotation();
     }
+
+    // private void LateUpdate()
+    // {
+    // }
 
     // Animator Parameter ID값 설정
     private void AssignAnimationIDs()
