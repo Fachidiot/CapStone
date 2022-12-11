@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class PlayerHud : NetworkBehaviour
@@ -22,13 +23,14 @@ public class PlayerHud : NetworkBehaviour
         }
     
         GetComponentInChildren<CinemachineFreeLook>().gameObject.SetActive(IsOwner);
+        GetComponent<PlayerInput>().enabled = IsOwner;
         UI_canvas.SetActive(!IsOwner);
     }
 
-    public void SetOverLay() {
-        var localPlayerOverlay = gameObject.GetComponentInChildren<TextMeshProUGUI>();
-        localPlayerOverlay.text = playersName.Value;
-    }
+    // public void SetOverLay() {
+    //     var localPlayerOverlay = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+    //     localPlayerOverlay.text = playersName.Value;
+    // }
     
     // void Update()
     // {
