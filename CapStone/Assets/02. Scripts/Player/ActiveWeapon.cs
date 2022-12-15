@@ -65,7 +65,7 @@ public class ActiveWeapon : MonoBehaviour
 
     RaycastWeapon GetCurrentWeapon()
     {
-        Debug.Log(activeWeaponIndex);
+        // Debug.Log(activeWeaponIndex);
         return GetWeapon(activeWeaponIndex);
     }
 

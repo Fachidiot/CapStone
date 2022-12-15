@@ -16,6 +16,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     public float aimDuration = 0.3f;
     [SerializeField]
     protected ActiveWeapon WeaponManager;
+    [SerializeField]
+    MultiAimConstraint[] targetList;
 
     [SerializeField]
     float normalFOV = 40;
@@ -43,7 +45,19 @@ public class ThirdPersonShooterController : MonoBehaviour
     void Awake()
     {
         if (targetTransform == null)
+        {
             targetTransform = new GameObject().GetComponent<Transform>();
+            targetTransform.gameObject.name = "Target";
+        }
+        foreach (MultiAimConstraint component in targetList)
+        {
+            var data = component.data.sourceObjects;
+            data.SetTransform(0, targetTransform);
+            component.data.sourceObjects = data;
+        }
+        RigBuilder rigs = GetComponent<RigBuilder>();
+        rigs.Build();
+
         input = GetComponent<CustomInput>();
         animator = GetComponent<Animator>();
         rigController = GetComponent<RigBuilder>();
