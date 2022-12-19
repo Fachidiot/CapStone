@@ -30,6 +30,7 @@ public class RaycastWeapon : MonoBehaviour
 
     [HideInInspector] public int ammoCount;
     public int maxAmmoCount;
+    public float damage = 10;
     [Header("Recoil System")]
     [Range(0, 10f)] public float maxRecoilTime;
     [Range(0, 7f)] public float recoilAmountVertical;
@@ -44,7 +45,6 @@ public class RaycastWeapon : MonoBehaviour
 
     [Header("Raycast")]
     public Transform raycastOrigin;
-    public Transform raycastDestination;
     public WeaponRecoil recoil;
     public GameObject magazine;
 
@@ -103,7 +103,16 @@ public class RaycastWeapon : MonoBehaviour
         //    m_accumulatedTime = lastm_accumulatedTime;
     }
 
-    public void UpdateFiring(float deltaTime)
+    public void UpdateWeapon(float deltaTime, Vector3 target) {
+        if (isFiring)
+            UpdateFiring(deltaTime, target);
+
+        m_accumulatedTime += deltaTime;
+
+        UpdateBullets(deltaTime);
+    }
+
+    public void UpdateFiring(float deltaTime, Vector3 target)
     {
         m_accumulatedTime += deltaTime;
         m_timePressed += deltaTime;
@@ -115,7 +124,7 @@ public class RaycastWeapon : MonoBehaviour
             else
             {
                 audioSource.PlayOneShot(audioClips[0]);
-                FireBullet();
+                FireBullet(target);
                 RecoilMath();
             }
             m_accumulatedTime -= fireInterval;
@@ -201,9 +210,15 @@ public class RaycastWeapon : MonoBehaviour
                 bullet.bounce--;
             }
 
+            // Collision impulse
             var rb2d = hitInfo.collider.GetComponent<Rigidbody>();
             if (rb2d)
                 rb2d.AddForceAtPosition(ray.direction * 20, hitInfo.point, ForceMode.Impulse);
+
+            // Hitbox
+            var hitBox = hitInfo.collider.GetComponent<HitBox>();
+            if (hitBox)
+                hitBox.OnRaycastHit(this, ray.direction);
         }
         else
         {
@@ -212,11 +227,11 @@ public class RaycastWeapon : MonoBehaviour
         }
     }
 
-    void FireBullet()
+    void FireBullet(Vector3 target)
     {
         muzzleFlash.Emit(1);
 
-        Vector3 velocity = (raycastDestination.position - raycastOrigin.position).normalized * bulletSpeed;
+        Vector3 velocity = (target - raycastOrigin.position).normalized * bulletSpeed;
         var bullet = CreateBullet(raycastOrigin.position, velocity);
         RecoilMath();
 
@@ -237,10 +252,5 @@ public class RaycastWeapon : MonoBehaviour
         isFiring = false;
         m_timePressed = 0;
         StopAllCoroutines();
-    }
-    
-    private void OnCollisionEnter(Collision other)
-    {
-        
     }
 }

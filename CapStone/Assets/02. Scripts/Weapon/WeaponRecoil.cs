@@ -39,6 +39,7 @@ public class WeaponRecoil : MonoBehaviour
 
         horizontalRecoil = recoilPattern[index].x;
         verticalRecoil = recoilPattern[index].y;
+
         verticalRecoilSum += verticalRecoil;
         if (verticalRecoilSum >= maxVerticalRecoil)
             verticalRecoil = 0;

@@ -13,6 +13,15 @@ public class PickupWeapon : MonoBehaviour
         if (WeaponManager) {
             RaycastWeapon newWeapon = Instantiate(WeaponPrefab);
             WeaponManager.Equip(newWeapon);
+            Destroy(gameObject);
+        }
+        
+        HitBox hitBox = other.gameObject.GetComponent<HitBox>();
+        if (hitBox) {
+            AIWeapons weapons = hitBox.health.GetComponent<AIWeapons>();
+            RaycastWeapon newWeapon = Instantiate(WeaponPrefab);
+            weapons.Equip(newWeapon);
+            Destroy(gameObject);
         }
     }
 }

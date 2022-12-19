@@ -42,7 +42,11 @@ public class ActiveWeapon : MonoBehaviour
 
     void Start()
     {
-        target = GetComponent<ThirdPersonShooterController>().targetTransform;
+        if (GetComponent<ThirdPersonController>())
+            target = GetComponent<ThirdPersonShooterController>().targetTransform;
+        else
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+            
         var playerUIManager = FindObjectOfType<PlayerUIManager>();
         hitUI = playerUIManager.UI_Hit;
         ammoCountUI = playerUIManager.UI_AmmoCount;
@@ -89,7 +93,7 @@ public class ActiveWeapon : MonoBehaviour
 
         weapon.StartFiring();
         if (weapon.isFiring)
-            weapon.UpdateFiring(Time.deltaTime);
+            weapon.UpdateFiring(Time.deltaTime, target.position);
         UpdateUI();
         weapon.UpdateBullets(Time.deltaTime);
     }
@@ -135,8 +139,8 @@ public class ActiveWeapon : MonoBehaviour
             Destroy(weapon.gameObject);
 
         weapon = newWeapon;
-        weapon.raycastDestination = target;
-        weapon.recoil.playerCamera = playerCamera;
+        if (playerCamera)
+            weapon.recoil.playerCamera = playerCamera;
         weapon.rigController = rigController;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.hitUI = hitUI;
@@ -214,7 +218,7 @@ public class ActiveWeapon : MonoBehaviour
 
     public void OnAnimationEvent(string eventName)
     {
-        Debug.Log(eventName);
+        // Debug.Log(eventName);
         switch (eventName)
         {
             case "detach_magazine":

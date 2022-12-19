@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 6270756753259458319}
   m_Layer: 0
   m_Name: Raycast_Plasma
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
   rigController: {fileID: 0}
   bulletColliderLayerMask:
     serializedVersion: 2
-    m_Bits: 27
+    m_Bits: 25
   fireRate: 10
   bulletPower: 30
   bulletDistance: 100
@@ -265,6 +265,7 @@ MonoBehaviour:
   weaponName: plasma
   ammoCount: 0
   maxAmmoCount: 100
+  damage: 10
   maxRecoilTime: 0
   recoilAmountVertical: 0
   recoilAmountHorizontal: 0

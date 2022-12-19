@@ -405,13 +405,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: reload_weapon
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -470,31 +470,31 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3030823948907368419}
-    m_Position: {x: 300, y: 170, z: 0}
+    m_Position: {x: 570, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8399178586472765721}
     m_Position: {x: 300, y: 50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1673110919214838736}
-    m_Position: {x: 300, y: 290, z: 0}
+    m_Position: {x: 570, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1627481044480226288}
-    m_Position: {x: 600, y: 170, z: 0}
+    m_Position: {x: 870, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4863225234134559249}
-    m_Position: {x: 600, y: 290, z: 0}
+    m_Position: {x: 870, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -637277847446486345}
-    m_Position: {x: 300, y: 350, z: 0}
+    m_Position: {x: 570, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -549072384703471996}
-    m_Position: {x: 600, y: 350, z: 0}
+    m_Position: {x: 870, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3197272879965368301}
-    m_Position: {x: 600, y: 230, z: 0}
+    m_Position: {x: 870, y: 50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8723268020449013365}
-    m_Position: {x: 600, y: 110, z: 0}
+    m_Position: {x: 870, y: -70, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
