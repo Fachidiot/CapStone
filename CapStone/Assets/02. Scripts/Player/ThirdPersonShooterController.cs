@@ -250,4 +250,9 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
         return Vector3.zero;
     }
+
+    void OnDestroy()
+    {
+        Destroy(targetTransform);
+    }
 }
