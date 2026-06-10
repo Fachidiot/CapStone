@@ -135,12 +135,12 @@ public class ThirdPersonController : NetworkBehaviour
         GroundedCheck();
         JumpAndGravity();
         Move();
-        CameraRotation();
     }
 
-    // private void LateUpdate()
-    // {
-    // }
+    private void Update()
+    {
+        CameraRotation();
+    }
 
     // Animator Parameter ID값 설정
     private void AssignAnimationIDs()
@@ -171,7 +171,7 @@ public class ThirdPersonController : NetworkBehaviour
         if (input.look.sqrMagnitude >= m_threshold && !LockCameraPosition)
         {
             //Don't multiply mouse input by Time.deltaTime;
-            float deltaTimeMultiplier = IsCurrentDeviceMouse ? m_sensitivity : Time.deltaTime;
+            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
             m_cinemachineTargetYaw += input.look.x * deltaTimeMultiplier;
             m_cinemachineTargetPitch += input.look.y * deltaTimeMultiplier;
@@ -227,7 +227,7 @@ public class ThirdPersonController : NetworkBehaviour
 
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
-        if (input.move != Vector2.zero)
+        if (input.move != Vector2.zero && targetSpeed >= MoveSpeed)
         {
             m_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, m_targetRotation, ref m_rotationVelocity,

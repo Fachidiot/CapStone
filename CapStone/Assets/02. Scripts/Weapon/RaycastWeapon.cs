@@ -86,6 +86,7 @@ public class RaycastWeapon : MonoBehaviour
         bullet.initialPosition = position;
         bullet.initialVelocity = velocity;
         bullet.time = 0.0f;
+        Debug.Log(position);
         bullet.tracer = Instantiate(tracerEffect, position, Quaternion.identity);
         bullet.tracer.AddPosition(position);
         bullet.bounce = maxBounces;
@@ -103,7 +104,8 @@ public class RaycastWeapon : MonoBehaviour
         //    m_accumulatedTime = lastm_accumulatedTime;
     }
 
-    public void UpdateWeapon(float deltaTime, Vector3 target) {
+    public void UpdateWeapon(float deltaTime, Vector3 target)
+    {
         if (isFiring)
             UpdateFiring(deltaTime, target);
 

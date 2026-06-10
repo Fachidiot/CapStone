@@ -3057,6 +3057,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7037641675207591660, guid: 58a3d1287eceb4e44a00e3c9b350ea4d, type: 3}
+      propertyPath: m_Data.m_SourceObjects.m_Item0.weight
+      value: 0.488
+      objectReference: {fileID: 0}
     - target: {fileID: 7037641675296083795, guid: 58a3d1287eceb4e44a00e3c9b350ea4d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -136.874

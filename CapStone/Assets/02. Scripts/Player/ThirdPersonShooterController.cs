@@ -242,7 +242,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     Vector3 GetMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, aimColliderLayerMask))
         {
             //Debug.Log(screenCenterPoint + " | " + raycastHit.point);
             targetTransform.position = raycastHit.point;

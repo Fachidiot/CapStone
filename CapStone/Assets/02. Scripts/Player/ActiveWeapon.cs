@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using QFSW.QC;
 
 public class ActiveWeapon : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class ActiveWeapon : MonoBehaviour
             target = GetComponent<ThirdPersonShooterController>().targetTransform;
         else
             target = GameObject.FindGameObjectWithTag("Player").transform;
-            
+
         var playerUIManager = FindObjectOfType<PlayerUIManager>();
         hitUI = playerUIManager.UI_Hit;
         ammoCountUI = playerUIManager.UI_AmmoCount;
@@ -93,7 +94,9 @@ public class ActiveWeapon : MonoBehaviour
 
         weapon.StartFiring();
         if (weapon.isFiring)
+        {
             weapon.UpdateFiring(Time.deltaTime, target.position);
+        }
         UpdateUI();
         weapon.UpdateBullets(Time.deltaTime);
     }
